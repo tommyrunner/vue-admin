@@ -5,13 +5,13 @@
         <h3 class="title">{{ $t('loginPage.title') }}</h3>
       </div>
 
-      <el-form-item prop="username">
+      <el-form-item prop="user">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
         <el-input
           ref="username"
-          v-model="loginForm.username"
+          v-model="loginForm.user"
           :placeholder="$t('loginPage.user')"
           name="username"
           type="text"
@@ -20,14 +20,14 @@
         />
       </el-form-item>
 
-      <el-form-item prop="password">
+      <el-form-item prop="pwd">
         <span class="svg-container">
           <svg-icon icon-class="pwd" />
         </span>
         <el-input
           :key="passwordType"
           ref="password"
-          v-model="loginForm.password"
+          v-model="loginForm.pwd"
           :type="passwordType"
           :placeholder="$t('loginPage.pwd')"
           name="password"
@@ -41,7 +41,7 @@
       </el-form-item>
       <el-row :gutter="10">
         <el-col :span="12">
-          <el-form-item prop="username" class="svg-container">
+          <el-form-item prop="code" class="svg-container">
             <span>
               <svg-icon icon-class="code" />
             </span>
@@ -78,6 +78,7 @@
 
 <script>
 import { validUsername } from '@/utils/validate'
+import userApi from '@/api/user.js'
 
 export default {
   name: 'Login',
@@ -98,8 +99,8 @@ export default {
     }
     return {
       loginForm: {
-        username: 'admin',
-        password: '111111',
+        user: '1223758238@qq.com',
+        pwd: '123456',
         code: '123'
       },
       loginRules: {
@@ -125,10 +126,22 @@ export default {
     this.getCodeImg()
   },
   methods: {
+    arrayBufferToBase64(buffer) {
+      var binary = ''
+      var bytes = new Uint8Array(buffer)
+      var len = bytes.byteLength
+      for (var i = 0; i < len; i++) {
+        binary += String.fromCharCode(bytes[i])
+      }
+      return window.btoa(binary)
+    },
     //获取验证图片
-    getCodeImg() {
-      let time = new Date().getTime()
-      this.codeImg = `http://localhost:8888/admin/test/code?time=${time}`
+    getCodeImg(params = {}) {
+      params.$config = { responseType: 'arraybuffer' } // 最为关键
+      params.time = new Date().getTime()
+      userApi.GetUserCode(params).then((res) => {
+        this.codeImg = 'data:image/jpeg;base64,' + this.arrayBufferToBase64(res.data)
+      })
     },
     showPwd() {
       if (this.passwordType === 'password') {
@@ -141,23 +154,31 @@ export default {
       })
     },
     handleLogin() {
-      this.$refs.loginForm.validate((valid) => {
-        if (valid) {
-          this.loading = true
-          this.$store
-            .dispatch('user/login', this.loginForm)
-            .then(() => {
-              this.$router.push({ path: this.redirect || '/' })
-              this.loading = false
-            })
-            .catch(() => {
-              this.loading = false
-            })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
+      userApi
+        .UserLogin(this.loginForm)
+        .then((res) => {
+          console.log(res)
+        })
+        .catch((e) => {
+          console.log(e)
+        })
+      // this.$refs.loginForm.validate((valid) => {
+      //   if (valid) {
+      //     this.loading = true
+      //     //   this.$store
+      //     //     .dispatch('user/login', this.loginForm)
+      //     //     .then(() => {
+      //     //       this.$router.push({ path: this.redirect || '/' })
+      //     //       this.loading = false
+      //     //     })
+      //     //     .catch(() => {
+      //     //       this.loading = false
+      //     //     })
+      //     // } else {
+      //     //   console.log('error submit!!')
+      //     //   return false
+      //   }
+      // })
     }
   }
 }

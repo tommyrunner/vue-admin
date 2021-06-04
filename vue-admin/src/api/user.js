@@ -1,24 +1,20 @@
-import request from '@/utils/request'
+import { getAxiosInstance, setDomain, postUserLogin, getUserCode } from 'admin-vue-sdk'
 
-export function login(data) {
-  return request({
-    url: '/vue-admin-template/user/login',
-    method: 'post',
-    data
-  })
+//修改请求头
+import { setApi } from './index'
+//getAxiosInstance:获取path,setDomain:设置请求头的方法
+setApi(getAxiosInstance, setDomain, '')
+
+// 获取登录验证图片
+const GetUserCode = (params) => {
+  return getUserCode(params)
+}
+// 用户登录
+const UserLogin = (params) => {
+  return postUserLogin(params)
 }
 
-export function getInfo(token) {
-  return request({
-    url: '/vue-admin-template/user/info',
-    method: 'get',
-    params: { token }
-  })
-}
-
-export function logout() {
-  return request({
-    url: '/vue-admin-template/user/logout',
-    method: 'post'
-  })
+export default {
+  UserLogin,
+  GetUserCode
 }
