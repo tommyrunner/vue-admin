@@ -9,15 +9,7 @@
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
-        <el-input
-          ref="username"
-          v-model="loginForm.user"
-          :placeholder="$t('loginPage.user')"
-          name="username"
-          type="text"
-          tabindex="1"
-          auto-complete="on"
-        />
+        <el-input ref="user" v-model="loginForm.user" :placeholder="$t('loginPage.user')" name="user" type="text" tabindex="1" auto-complete="on" />
       </el-form-item>
 
       <el-form-item prop="pwd">
@@ -30,7 +22,7 @@
           v-model="loginForm.pwd"
           :type="passwordType"
           :placeholder="$t('loginPage.pwd')"
-          name="password"
+          name="pwd"
           tabindex="2"
           auto-complete="on"
           @keyup.enter.native="handleLogin"
@@ -77,19 +69,11 @@
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
 import userApi from '@/api/user.js'
 
 export default {
   name: 'Login',
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
-      } else {
-        callback()
-      }
-    }
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
         callback(new Error('The password can not be less than 6 digits'))
@@ -104,9 +88,9 @@ export default {
         code: '123'
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }],
-        code: [{ required: true, trigger: 'blur', validator: validatePassword }]
+        user: [{ required: true, trigger: 'blur' }],
+        pwd: [{ required: true, trigger: 'blur', validator: validatePassword }],
+        code: [{ required: true, trigger: 'blur', min: 1, max: 5 }]
       },
       codeImg: '',
       loading: false,
@@ -154,31 +138,21 @@ export default {
       })
     },
     handleLogin() {
-      userApi
-        .UserLogin(this.loginForm)
-        .then((res) => {
-          console.log(res)
-        })
-        .catch((e) => {
-          console.log(e)
-        })
-      // this.$refs.loginForm.validate((valid) => {
-      //   if (valid) {
-      //     this.loading = true
-      //     //   this.$store
-      //     //     .dispatch('user/login', this.loginForm)
-      //     //     .then(() => {
-      //     //       this.$router.push({ path: this.redirect || '/' })
-      //     //       this.loading = false
-      //     //     })
-      //     //     .catch(() => {
-      //     //       this.loading = false
-      //     //     })
-      //     // } else {
-      //     //   console.log('error submit!!')
-      //     //   return false
-      //   }
-      // })
+      this.$refs.loginForm.validate((valid) => {
+        if (valid) {
+          this.loading = true
+          userApi
+            .UserLogin(this.loginForm)
+            .then((res) => {
+              console.log(res)
+              this.loading = false
+            })
+            .catch((e) => {
+              console.log(e)
+              this.loading = false
+            })
+        }
+      })
     }
   }
 }
