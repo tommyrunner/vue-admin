@@ -1,0 +1,48 @@
+/* eslint-disable */
+import axios from 'axios'
+import qs from 'qs'
+let domain = '{{&domain}}'
+let axiosInstance = axios.create()
+export const getDomain = () => {
+  return domain
+}
+export const setDomain = ($domain) => {
+  domain = $domain
+}
+export const getAxiosInstance = () => {
+  return axiosInstance
+}
+export const setAxiosInstance = ($axiosInstance) => {
+  axiosInstance = $axiosInstance
+}
+export const request = (method, url, body, queryParameters, formData, config)=>{
+    // method = method.toLowerCase()
+    // let keys = Object.keys(queryParameters)
+    // let queryUrl = url
+    // if ( keys.length > 0 ) {
+    //     queryUrl = url + '?' + qs.stringify(queryParameters)
+    // }
+    // if(body && Object.keys(body).length > 0){
+    //     return axiosInstance[method](queryUrl,body,config)
+    // } else if (method === 'get' || method === 'delete' || method === 'head' || method === 'option') {
+    //     return axiosInstance[method](queryUrl,config)
+    // } else {
+    //     return axiosInstance[method](queryUrl,formData,config)
+    // }
+    method = method.toLowerCase()
+    if (!config) {
+        config = {};
+    }
+    config.url = url;
+    config.params = queryParameters;
+    config.method = method;
+    const formDataExist = formData.entries().next().value;
+    const bodyExist = body && Object.keys(body).length > 0;
+    if (formDataExist) {
+        config.data = formData;
+    } else if (bodyExist) {
+        config.data = body;
+    }
+    return axiosInstance.request(config);
+}
+{{> methods }}
