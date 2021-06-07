@@ -5,10 +5,14 @@ import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * @Author Tommy
+ * 2021/6/6
+ */
 @Entity
-@Table(name = "tb_roles")
+@Table(name = "tb_rules")
 @Data
-public class RolesEntity implements Serializable {
+public class RulesEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
