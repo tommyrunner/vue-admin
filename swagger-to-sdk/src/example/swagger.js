@@ -89,6 +89,52 @@ export const getUserCodeURL = function(parameters = {}) {
   return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
 }
 /**
+ * getUserInfo
+ * request: getUserGetUserInfo
+ * url: getUserGetUserInfoURL
+ * method: getUserGetUserInfo_TYPE
+ * raw_url: getUserGetUserInfo_RAW_URL
+ * @param token - token
+ */
+export const getUserGetUserInfo = function(parameters = {}) {
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  const config = parameters.$config
+  let path = '/user/getUserInfo'
+  let body = {};
+  let queryParameters = {};
+  let formData = new FormData();
+  if (parameters['token'] !== undefined) {
+    queryParameters['token'] = parameters['token']
+  }
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    });
+  }
+  return request('get', domain + path, body, queryParameters, formData, config)
+}
+export const getUserGetUserInfo_RAW_URL = function() {
+  return '/user/getUserInfo'
+}
+export const getUserGetUserInfo_TYPE = function() {
+  return 'get'
+}
+export const getUserGetUserInfoURL = function(parameters = {}) {
+  let queryParameters = {}
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  let path = '/user/getUserInfo'
+  if (parameters['token'] !== undefined) {
+    queryParameters['token'] = parameters['token']
+  }
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    })
+  }
+  let keys = Object.keys(queryParameters)
+  return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
+}
+/**
  * userLogin
  * request: postUserLogin
  * url: postUserLoginURL

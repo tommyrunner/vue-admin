@@ -70,7 +70,6 @@
 
 <script>
 import userApi from '@/api/user.js'
-import jwtDecode from 'jwt-decode'
 export default {
   name: 'Login',
   data() {
@@ -141,16 +140,17 @@ export default {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
           this.loading = true
-          userApi
-            .UserLogin(this.loginForm)
-            .then((res) => {
-              console.log(res)
+          this.$store
+            .dispatch('user/login', this.loginForm)
+            .then(() => {
+              // this.$router.push({ path: this.redirect || '/' })
               this.loading = false
             })
             .catch((e) => {
-              console.log(e)
               this.loading = false
             })
+        } else {
+          return false
         }
       })
     }

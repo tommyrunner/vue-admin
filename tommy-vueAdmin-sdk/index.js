@@ -31,19 +31,19 @@ export const request = (method, url, body, queryParameters, formData, config) =>
   // }
   method = method.toLowerCase()
   if (!config) {
-    config = {}
+    config = {};
   }
-  config.url = url
-  config.params = queryParameters
-  config.method = method
-  const formDataExist = formData.entries().next().value
-  const bodyExist = body && Object.keys(body).length > 0
+  config.url = url;
+  config.params = queryParameters;
+  config.method = method;
+  const formDataExist = formData.entries().next().value;
+  const bodyExist = body && Object.keys(body).length > 0;
   if (formDataExist) {
-    config.data = formData
+    config.data = formData;
   } else if (bodyExist) {
-    config.data = body
+    config.data = body;
   }
-  return axiosInstance.request(config)
+  return axiosInstance.request(config);
 }
 /*==========================================================
  *                    文档描述
@@ -60,13 +60,13 @@ export const getUserCode = function(parameters = {}) {
   const domain = parameters.$domain ? parameters.$domain : getDomain()
   const config = parameters.$config
   let path = '/user/code'
-  let body = {}
-  let queryParameters = {}
-  let formData = new FormData()
+  let body = {};
+  let queryParameters = {};
+  let formData = new FormData();
   if (parameters.$queryParameters) {
     Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
       queryParameters[parameterName] = parameters.$queryParameters[parameterName]
-    })
+    });
   }
   return request('get', domain + path, body, queryParameters, formData, config)
 }
@@ -86,7 +86,53 @@ export const getUserCodeURL = function(parameters = {}) {
     })
   }
   let keys = Object.keys(queryParameters)
-  return domain + path + (keys.length > 0 ? '?' + keys.map((key) => key + '=' + encodeURIComponent(queryParameters[key])).join('&') : '')
+  return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
+}
+/**
+ * getUserInfo
+ * request: getUserGetUserInfo
+ * url: getUserGetUserInfoURL
+ * method: getUserGetUserInfo_TYPE
+ * raw_url: getUserGetUserInfo_RAW_URL
+ * @param token - token
+ */
+export const getUserGetUserInfo = function(parameters = {}) {
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  const config = parameters.$config
+  let path = '/user/getUserInfo'
+  let body = {};
+  let queryParameters = {};
+  let formData = new FormData();
+  if (parameters['token'] !== undefined) {
+    queryParameters['token'] = parameters['token']
+  }
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    });
+  }
+  return request('get', domain + path, body, queryParameters, formData, config)
+}
+export const getUserGetUserInfo_RAW_URL = function() {
+  return '/user/getUserInfo'
+}
+export const getUserGetUserInfo_TYPE = function() {
+  return 'get'
+}
+export const getUserGetUserInfoURL = function(parameters = {}) {
+  let queryParameters = {}
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  let path = '/user/getUserInfo'
+  if (parameters['token'] !== undefined) {
+    queryParameters['token'] = parameters['token']
+  }
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    })
+  }
+  let keys = Object.keys(queryParameters)
+  return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
 }
 /**
  * userLogin
@@ -103,9 +149,9 @@ export const postUserLogin = function(parameters = {}) {
   const domain = parameters.$domain ? parameters.$domain : getDomain()
   const config = parameters.$config
   let path = '/user/login'
-  let body = {}
-  let queryParameters = {}
-  let formData = new FormData()
+  let body = {};
+  let queryParameters = {};
+  let formData = new FormData();
   if (parameters['code'] === undefined) {
     return Promise.reject(new Error('Missing parameter : code'))
   }
@@ -116,14 +162,14 @@ export const postUserLogin = function(parameters = {}) {
     return Promise.reject(new Error('Missing parameter : user'))
   }
   if (parameters.$body) {
-    body = parameters.$body
+    body = parameters.$body;
   } else {
     body = parameters
   }
   if (parameters.$queryParameters) {
     Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
       queryParameters[parameterName] = parameters.$queryParameters[parameterName]
-    })
+    });
   }
   return request('post', domain + path, body, queryParameters, formData, config)
 }
@@ -143,5 +189,5 @@ export const postUserLoginURL = function(parameters = {}) {
     })
   }
   let keys = Object.keys(queryParameters)
-  return domain + path + (keys.length > 0 ? '?' + keys.map((key) => key + '=' + encodeURIComponent(queryParameters[key])).join('&') : '')
+  return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
 }
