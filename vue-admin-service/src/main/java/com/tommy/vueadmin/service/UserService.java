@@ -1,10 +1,12 @@
 package com.tommy.vueadmin.service;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.tommy.vueadmin.dao.UserDao;
 import com.tommy.vueadmin.dao.RolesDao;
 import com.tommy.vueadmin.entity.RolesEntity;
 import com.tommy.vueadmin.entity.UserEntity;
 import com.tommy.vueadmin.utils.ReturnDateUtil;
+import com.tommy.vueadmin.utils.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,10 +50,24 @@ public class UserService {
         byUser.setPwd("*********");
         //获取用户权限
         List<RolesEntity> rolesUsers= rolesDao.findUserIdToRolesEntity(byUser.getId());
-        Map<String,Object> returnMap = new HashMap<>();
-        returnMap.put("userInfo",byUser);
-        returnMap.put("roles",rolesUsers);
-        return ReturnDateUtil.returnData(ReturnDateUtil.CODE_OK,"登录成功!",returnMap);
+        //生成token
+        String token = TokenUtil.sign(byUser,rolesUsers);
+        return ReturnDateUtil.returnData(ReturnDateUtil.CODE_OK,"登录成功!",token);
     }
 
+    //通过token获取用户详情
+    public Map<String,Object> getUserInfoService(String token){
+        DecodedJWT jwt = TokenUtil.verify(token);
+        if(jwt==null){
+            //token错误/或者过期
+            return  ReturnDateUtil.returnData(ReturnDateUtil.CODE_ERROR_TOKEN,"身份错误或失效",null);
+        }else {
+//            System.out.println("issuer: " + jwt.getIssuer());
+//            System.out.println("过期时间：      " + jwt.getExpiresAt());
+            Map<String,Object> userInfo = new HashMap<>();
+            userInfo.put("userInfo",jwt.getClaim("userInfo").asString());
+            userInfo.put("roles",jwt.getClaim("roles").asString());
+            return ReturnDateUtil.returnData(ReturnDateUtil.CODE_OK,"获取成功!",userInfo);
+        }
+    }
 }

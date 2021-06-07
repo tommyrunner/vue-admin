@@ -10,9 +10,9 @@ import java.io.Serializable;
  * 2021/6/6
  */
 @Entity
-@Table(name = "tb_rules")
+@Table(name = "tb_roles")
 @Data
-public class RulesEntity implements Serializable {
+public class RolesEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;

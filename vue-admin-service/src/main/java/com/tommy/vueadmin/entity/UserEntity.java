@@ -8,6 +8,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "tb_user")
 @Data
+//用户
 public class UserEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

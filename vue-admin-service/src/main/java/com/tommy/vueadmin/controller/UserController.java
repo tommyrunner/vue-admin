@@ -3,6 +3,7 @@ package com.tommy.vueadmin.controller;
 import com.google.code.kaptcha.Producer;
 import com.tommy.vueadmin.service.UserService;
 import com.tommy.vueadmin.utils.ReturnDateUtil;
+import com.tommy.vueadmin.utils.TokenUtil;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiModelProperty;
@@ -65,6 +66,10 @@ public class UserController {
             @RequestBody(required = false) Map<String, Object> userMap) {
           return   userService.loginUserService(userMap);
 
+    }
+    @GetMapping("/getUserInfo")
+    public Map<String, Object> getUserInfo(String token){
+       return  userService.getUserInfoService(token);
     }
 
 }

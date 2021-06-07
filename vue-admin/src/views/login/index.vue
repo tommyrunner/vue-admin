@@ -70,7 +70,7 @@
 
 <script>
 import userApi from '@/api/user.js'
-
+import jwtDecode from 'jwt-decode'
 export default {
   name: 'Login',
   data() {

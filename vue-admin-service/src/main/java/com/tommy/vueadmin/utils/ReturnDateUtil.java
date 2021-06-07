@@ -6,7 +6,7 @@ import java.util.Map;
 public class ReturnDateUtil {
     public static int CODE_OK = 200;
     public static int CODE_ERROR = 400;//普通错误
-    public static int CODE_ERROR_TOKEN = 403;//普通错误
+    public static int CODE_ERROR_TOKEN = 403;//token错误
     public static int CODE_ERROR_PARA = 405;//却少参数
     /**
      * 返回规范

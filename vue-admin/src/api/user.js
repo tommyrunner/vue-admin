@@ -1,4 +1,4 @@
-import { getAxiosInstance, setDomain, postUserLogin, getUserCode } from 'admin-vue-sdk'
+import { getAxiosInstance, setDomain, postUserLogin, getUserCode } from 'tommy-vueadmin-sdk'
 
 //修改请求头
 import { setApi } from './index'
