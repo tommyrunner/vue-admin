@@ -70,6 +70,7 @@
 
 <script>
 import userApi from '@/api/user.js'
+import { generateUUID } from '@/utils'
 export default {
   name: 'Login',
   data() {
@@ -89,12 +90,13 @@ export default {
       loginRules: {
         user: [{ required: true, trigger: 'blur' }],
         pwd: [{ required: true, trigger: 'blur', validator: validatePassword }],
-        code: [{ required: true, trigger: 'blur', min: 1, max: 5 }]
+        code: [{ required: true, trigger: 'blur', min: 1, max: 2 }]
       },
       codeImg: '',
       loading: false,
       passwordType: 'password',
-      redirect: undefined
+      redirect: undefined,
+      uuid: ''
     }
   },
   watch: {
@@ -106,6 +108,8 @@ export default {
     }
   },
   mounted() {
+    //获取uuid
+    this.uuid = generateUUID()
     this.getCodeImg()
   },
   methods: {
@@ -122,6 +126,7 @@ export default {
     getCodeImg(params = {}) {
       params.$config = { responseType: 'arraybuffer' } // 最为关键
       params.time = new Date().getTime()
+      params.uuid = this.uuid
       userApi.GetUserCode(params).then((res) => {
         this.codeImg = 'data:image/jpeg;base64,' + this.arrayBufferToBase64(res.data)
       })
@@ -140,6 +145,8 @@ export default {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
           this.loading = true
+          //存入uuid
+          this.loginForm.uuid = this.uuid
           this.$store
             .dispatch('user/login', this.loginForm)
             .then(() => {
@@ -148,6 +155,7 @@ export default {
             })
             .catch((e) => {
               this.loading = false
+              this.$message.error({ message: e || 'Has Error' })
             })
         } else {
           return false

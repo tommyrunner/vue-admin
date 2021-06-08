@@ -32,7 +32,7 @@ public class TokenFilter implements Filter {
 
     //需要过滤的api
     private static final Set<String> PASS_ALLOWED_PATHS = Collections.unmodifiableSet(new HashSet<>(
-            Arrays.asList("/user/login","/v2/api-docs")));
+            Arrays.asList("/user/login","/v2/api-docs","/user/code")));
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
@@ -95,6 +95,7 @@ public class TokenFilter implements Filter {
             //放行
             filterChain.doFilter(servletRequest, servletResponse);
         } catch (Exception e) {
+            System.out.println(e.toString());
             log.debug("解析token错误:" + e.toString());
             request.getRequestDispatcher("/toError?msg=解析token失败!&code=" + ReturnDateUtil.CODE_ERROR_TOKEN).forward(request, response);
         }

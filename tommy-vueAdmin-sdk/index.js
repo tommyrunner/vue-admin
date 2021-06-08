@@ -421,11 +421,57 @@ export const patchToErrorURL = function(parameters = {}) {
   return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
 }
 /**
+ * addUser
+ * request: postUserAddUser
+ * url: postUserAddUserURL
+ * method: postUserAddUser_TYPE
+ * raw_url: postUserAddUser_RAW_URL
+ * @param userEntity - userEntity
+ */
+export const postUserAddUser = function(parameters = {}) {
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  const config = parameters.$config
+  let path = '/user/addUser'
+  let body = {};
+  let queryParameters = {};
+  let formData = new FormData();
+  if (parameters.$body) {
+    body = parameters.$body;
+  } else {
+    body = parameters
+  }
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    });
+  }
+  return request('post', domain + path, body, queryParameters, formData, config)
+}
+export const postUserAddUser_RAW_URL = function() {
+  return '/user/addUser'
+}
+export const postUserAddUser_TYPE = function() {
+  return 'post'
+}
+export const postUserAddUserURL = function(parameters = {}) {
+  let queryParameters = {}
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  let path = '/user/addUser'
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    })
+  }
+  let keys = Object.keys(queryParameters)
+  return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
+}
+/**
  * loginCode
  * request: getUserCode
  * url: getUserCodeURL
  * method: getUserCode_TYPE
  * raw_url: getUserCode_RAW_URL
+ * @param uuid - uuid
  */
 export const getUserCode = function(parameters = {}) {
   const domain = parameters.$domain ? parameters.$domain : getDomain()
@@ -434,6 +480,9 @@ export const getUserCode = function(parameters = {}) {
   let body = {};
   let queryParameters = {};
   let formData = new FormData();
+  if (parameters['uuid'] !== undefined) {
+    queryParameters['uuid'] = parameters['uuid']
+  }
   if (parameters.$queryParameters) {
     Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
       queryParameters[parameterName] = parameters.$queryParameters[parameterName]
@@ -451,6 +500,9 @@ export const getUserCodeURL = function(parameters = {}) {
   let queryParameters = {}
   const domain = parameters.$domain ? parameters.$domain : getDomain()
   let path = '/user/code'
+  if (parameters['uuid'] !== undefined) {
+    queryParameters['uuid'] = parameters['uuid']
+  }
   if (parameters.$queryParameters) {
     Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
       queryParameters[parameterName] = parameters.$queryParameters[parameterName]

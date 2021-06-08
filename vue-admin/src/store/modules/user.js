@@ -35,6 +35,10 @@ const actions = {
         .UserLogin({ ...userInfo })
         .then((response) => {
           const { data } = response
+          if (data.code !== 200) {
+            //验证报错
+            return reject(data.msg)
+          }
           commit('SET_TOKEN', data.data)
           setToken(data.data)
           resolve()

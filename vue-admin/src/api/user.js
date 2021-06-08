@@ -1,5 +1,4 @@
 import { getAxiosInstance, setDomain, postUserLogin, getUserCode, getUserGetUserInfo, getUserLoginOut } from 'tommy-vueadmin-sdk'
-
 //修改请求头
 import { setApi } from './index'
 //getAxiosInstance:获取path,setDomain:设置请求头的方法
