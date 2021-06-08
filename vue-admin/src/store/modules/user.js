@@ -52,11 +52,11 @@ const actions = {
         .GetUserInfo({ token: state.token })
         .then((response) => {
           const { data } = response
-          if (!data) {
-            return reject('Verification failed, please Login again.')
+          if (data.code !== 200) {
+            //验证报错
+            return reject(data.msg)
           }
           const { userInfo, roles } = data.data
-          debugger
           commit('SET_USERINFO', userInfo)
           commit('SET_ROLES', roles)
           resolve(data.data)
@@ -70,7 +70,8 @@ const actions = {
   // user logout
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
-      logout(state.token)
+      userApi
+        .GetUserLoginOut({ token: state.token })
         .then(() => {
           removeToken() // must remove  token  first
           resetRouter()

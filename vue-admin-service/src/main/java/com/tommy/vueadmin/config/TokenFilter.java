@@ -1,27 +1,19 @@
-package com.tmm.tmmhome.config.TokenConfig;
+package com.tommy.vueadmin.config;
 
-import com.tmm.tmmhome.config.RequestFilter;
-import com.tmm.tmmhome.dao.UserDataDao;
-import com.tmm.tmmhome.dao.UserVisitDao;
-import com.tmm.tmmhome.emtity.UserVisit;
-import com.tmm.tmmhome.service.UserSetServiceImpl;
-import com.tmm.tmmhome.service.UserVisitServiceImpl;
+import com.alibaba.fastjson.JSONObject;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.tommy.vueadmin.entity.TokenEntity;
+import com.tommy.vueadmin.entity.UserEntity;
+import com.tommy.vueadmin.utils.DataBase;
+import com.tommy.vueadmin.utils.ReturnDateUtil;
+import com.tommy.vueadmin.utils.TokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
-import org.springframework.web.filter.GenericFilterBean;
 
-import javax.annotation.Resource;
 import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -35,24 +27,12 @@ import java.util.*;
 @Slf4j
 @Component
 public class TokenFilter implements Filter {
-
-    private TokenProvider tokenProvider;
-    private StringRedisTemplate stringRedisTemplate;
-
-    public TokenFilter(TokenProvider tokenProvider,StringRedisTemplate stringRedisTemplate) {
-        this.tokenProvider = tokenProvider;
-        this.stringRedisTemplate = stringRedisTemplate;
-    }
-
+    @Autowired
+    RedisTemplate redisTemplate;     //redis k-v操作字符串
 
     //需要过滤的api
-    private static final Set<String> NOT_ALLOWED_PATHS = Collections.unmodifiableSet(new HashSet<>(
-            Arrays.asList("/user/deleteUserOpinion", "/user/setUserData"
-                    , "/user/deleteUserTings", "/user/addUserTings", "/user/deleteUserImg"
-                    , "/user/addUserImg", "/user/addUserApk", "/user/deleteUserApk", "/user/addUserHtml",
-                    "/user/deleteUserHtml", "/user/addUserWord", "/user/deleteUserWord",
-                    "/user/addTodoList", "/user/deleteTodoList", "/user/updateTodoList", "/user/getVisit"
-            )));
+    private static final Set<String> PASS_ALLOWED_PATHS = Collections.unmodifiableSet(new HashSet<>(
+            Arrays.asList("/user/login","/v2/api-docs")));
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
@@ -66,36 +46,57 @@ public class TokenFilter implements Filter {
         String bearerToken = request.getHeader("Authorization");
         try {
             String token = null;
-            String ip = RequestFilter.getIpAddress(request);
-            if (!StringUtils.isEmpty(bearerToken) && bearerToken.startsWith("Bearer")) {
-                token = bearerToken.replace("Bearer", "");
+            if (!StringUtils.isEmpty(bearerToken) && bearerToken.startsWith("Bearer ")) {
+                token = bearerToken.replace("Bearer ", "");
             }
             String path = request.getRequestURI().substring(request.getContextPath().length()).replaceAll("[/]+$", "");
-            boolean allowedPath = NOT_ALLOWED_PATHS.contains(path);
-
-            if (!allowedPath) {
-                //如果是排除的url
+            boolean allowedPath = PASS_ALLOWED_PATHS.contains(path);
+//            验证路径是否需要token
+            if (allowedPath) {
+                //不需要验证token
                 filterChain.doFilter(servletRequest, servletResponse);
-            } else {
-                //没携带token
-                if (token == null) {
-                    request.getRequestDispatcher("/toError?msg='没有找到token哦'").forward(request, response);
-                    return;
-                }
-                //是否挤出token
-                String myToken_ip = stringRedisTemplate.opsForValue().get("tommy_ip");
-                if(!ip.equals(myToken_ip)){
-                    request.getRequestDispatcher("/toError?msg='异地设备登陆,请重新登录!'").forward(request, response);
-                    return;
-                }
-                Authentication authentication = tokenProvider.getAuthentication(token);//解析token
-                //让security去校验token/如果失败(失效,没有,抛出500错误)
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                filterChain.doFilter(servletRequest, servletResponse);
+                return;
             }
+//            校验token
+            if (token == null) {
+                //没有携带token
+                request.getRequestDispatcher("/toError?msg=未携带身份!&code=" + ReturnDateUtil.CODE_ERROR_TOKEN).forward(request, response);
+                return;
+            }
+            DecodedJWT verify = TokenUtil.verify(token);
+            if (verify == null) {
+                //没有携带token
+                request.getRequestDispatcher("/toError?msg=身份验证验证失败,请重新登录!&code=" + ReturnDateUtil.CODE_ERROR_TOKEN).forward(request, response);
+                return;
+            }
+            //token过期或者token错误
+            UserEntity userEntity = JSONObject.parseObject(verify.getClaim("userInfo").asString(), UserEntity.class);
+            if (userEntity == null) {
+                request.getRequestDispatcher("/toError?msg=身份验证已经过时或身份验证失败,请重新登录!&code=" + ReturnDateUtil.CODE_ERROR_TOKEN).forward(request, response);
+                return;
+            }
+            //检查redis是否存在token
+            Object tokenEntityString = redisTemplate.opsForValue().get(userEntity.getUser());
+            if (tokenEntityString == null) {
+                //未登录token
+                request.getRequestDispatcher("/toError?msg=未存在身份,请登录!&code=" + ReturnDateUtil.CODE_ERROR_TOKEN).forward(request, response);
+                return;
+            }
+//            验证token是否超时
+            TokenEntity tokenEntity = JSONObject.parseObject(tokenEntityString.toString(), TokenEntity.class);
+            //查询是否身份过时
+            if (tokenEntity != null && tokenEntity.getTime() + DataBase.TOKEN_EXPIRE_TIME <= new Date().getTime()) {
+                //过期
+                request.getRequestDispatcher("/toError?msg=身份验证已经过时,请重新登录!&code=" + ReturnDateUtil.CODE_ERROR_TOKEN).forward(request, response);
+                //删除过期的token
+                redisTemplate.delete(userEntity.getUser());
+                return;
+            }
+            //放行
+            filterChain.doFilter(servletRequest, servletResponse);
         } catch (Exception e) {
-            log.debug("解析token错误:"+e.toString());
-            request.getRequestDispatcher("/toError?msg='解析token失败!'").forward(request, response);
+            log.debug("解析token错误:" + e.toString());
+            request.getRequestDispatcher("/toError?msg=解析token失败!&code=" + ReturnDateUtil.CODE_ERROR_TOKEN).forward(request, response);
         }
 
     }

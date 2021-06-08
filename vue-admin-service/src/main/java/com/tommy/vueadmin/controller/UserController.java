@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/user")
+@Slf4j
 public class UserController {
 
     @Autowired
@@ -34,6 +36,7 @@ public class UserController {
 
     @GetMapping("/code")
     public void loginCode(HttpServletResponse response) {
+        log.debug("-------------------loginCode:获取验证码-------------");
         response.setHeader("Cache-Control", "no-store, no-cache");
         response.setContentType("image/jpeg");
         //生成文字验证码
@@ -64,12 +67,20 @@ public class UserController {
     public Map<String,Object> userLogin(
             @ApiParam(value = "接收对象", name = "userMap", required = true)
             @RequestBody(required = false) Map<String, Object> userMap) {
+        log.debug("-------------------userLogin:用户登录-------------");
           return   userService.loginUserService(userMap);
 
     }
     @GetMapping("/getUserInfo")
     public Map<String, Object> getUserInfo(String token){
+        log.debug("-------------------getUserInfo:获取用户详情-------------");
        return  userService.getUserInfoService(token);
+    }
+
+    @GetMapping("/loginOut")
+    public Map<String, Object> loginOut(String token){
+        log.debug("-------------------loginOut:登出-------------");
+        return  userService.loginOutService(token);
     }
 
 }

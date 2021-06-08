@@ -1,4 +1,4 @@
-import { getAxiosInstance, setDomain, postUserLogin, getUserCode, getUserGetUserInfo } from 'tommy-vueadmin-sdk'
+import { getAxiosInstance, setDomain, postUserLogin, getUserCode, getUserGetUserInfo, getUserLoginOut } from 'tommy-vueadmin-sdk'
 
 //修改请求头
 import { setApi } from './index'
@@ -13,12 +13,18 @@ const GetUserCode = (params) => {
 const UserLogin = (params) => {
   return postUserLogin(params)
 }
-// 用户登录
+// 获取用户详情
 const GetUserInfo = (params) => {
   return getUserGetUserInfo(params)
+}
+
+// 获取用户详情
+const GetUserLoginOut = (params) => {
+  return getUserLoginOut(params)
 }
 export default {
   UserLogin,
   GetUserCode,
-  GetUserInfo
+  GetUserInfo,
+  GetUserLoginOut
 }
