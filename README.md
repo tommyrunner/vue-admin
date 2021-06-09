@@ -37,6 +37,7 @@
   + swagger自动生成接口文档
   + 使用rides管理缓存
   + 用户登录管理
+    + 密码使用md5暗文加密
     + kaptcha生成图片验证码
       + redis存入并1分钟删除,提供校验
     + jwt生成token验证
