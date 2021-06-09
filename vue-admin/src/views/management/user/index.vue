@@ -1,8 +1,16 @@
 <template>
-  <el-table v-loading="loading" :data="tableData" stripe style="width: 100%">
+  <el-table border v-loading="loading" :data="tableData" stripe style="width: 100%">
+    <el-table-column type="index" width="50" label="序号" />
+    <el-table-column type="selection" width="55" />
     <el-table-column prop="user" label="账号" width="180"> </el-table-column>
     <el-table-column prop="name" label="名称" width="180"> </el-table-column>
     <el-table-column prop="note" label="备注"> </el-table-column>
+    <el-table-column fixed="right" label="操作" width="200">
+      <template slot-scope="scope">
+        <el-button @click="handleClick(scope)" type="primary" size="mini">查看</el-button>
+        <el-button type="danger" size="mini">删除</el-button>
+      </template>
+    </el-table-column>
   </el-table>
 </template>
 <script>
@@ -26,6 +34,9 @@ export default {
         console.log(e)
         this.loading = false
       })
+  },
+  methods: {
+    handleClick() {}
   }
 }
 </script>
