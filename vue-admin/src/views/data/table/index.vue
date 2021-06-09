@@ -1,13 +1,6 @@
 <template>
   <div class="app-container">
-    <el-table
-      v-loading="listLoading"
-      :data="list"
-      element-loading-text="Loading"
-      border
-      fit
-      highlight-current-row
-    >
+    <el-table v-loading="listLoading" :data="list" element-loading-text="Loading" border fit highlight-current-row>
       <el-table-column align="center" label="ID" width="95">
         <template slot-scope="scope">
           {{ scope.$index }}
@@ -60,20 +53,14 @@ export default {
   data() {
     return {
       list: null,
-      listLoading: true
+      listLoading: false
     }
   },
   created() {
     this.fetchData()
   },
   methods: {
-    fetchData() {
-      this.listLoading = true
-      getList().then(response => {
-        this.list = response.data.items
-        this.listLoading = false
-      })
-    }
+    fetchData() {}
   }
 }
 </script>

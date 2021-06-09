@@ -18,6 +18,8 @@ export default {
     Dashboard: 'Dashboard',
     Data: 'Example',
     Table: 'Table',
-    System: 'System'
+    System: 'System',
+    Management: 'Management',
+    User: 'User'
   }
 }

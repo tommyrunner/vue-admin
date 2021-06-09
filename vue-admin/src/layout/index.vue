@@ -7,7 +7,7 @@
         <navbar />
       </div>
       <tags-view />
-      <app-main />
+      <app-main class="app-main" />
     </div>
   </div>
 </template>
@@ -91,5 +91,8 @@ export default {
 
 .mobile .fixed-header {
   width: 100%;
+}
+.app-main {
+  padding: 20px;
 }
 </style>

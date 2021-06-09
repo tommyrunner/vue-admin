@@ -65,12 +65,6 @@ export const constantRoutes = [
     meta: { title: 'Data', icon: 'data' },
     children: [
       {
-        path: 'system',
-        name: 'System',
-        component: () => import('@/views/data/system/index'),
-        meta: { title: 'System', icon: 'system' }
-      },
-      {
         path: 'table',
         name: 'Table',
         component: () => import('@/views/data/table/index'),
@@ -78,7 +72,27 @@ export const constantRoutes = [
       }
     ]
   },
-
+  {
+    path: '/management',
+    component: Layout,
+    redirect: '/management/system',
+    name: 'Management',
+    meta: { title: 'Management', icon: 'management' },
+    children: [
+      {
+        path: 'system',
+        name: 'System',
+        component: () => import('@/views/management/system/index'),
+        meta: { title: 'System', icon: 'system' }
+      },
+      {
+        path: 'user',
+        name: 'User',
+        component: () => import('@/views/management/user/index'),
+        meta: { title: 'User', icon: 'user' }
+      }
+    ]
+  },
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]

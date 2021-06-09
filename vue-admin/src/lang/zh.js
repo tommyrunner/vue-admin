@@ -18,6 +18,8 @@ export default {
     Dashboard: '控制板',
     Data: '数据',
     Table: '表格',
-    System: '系统'
+    System: '系统',
+    Management: '管理',
+    User: '用户'
   }
 }
