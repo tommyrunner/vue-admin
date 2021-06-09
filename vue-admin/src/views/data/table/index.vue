@@ -1,66 +1,33 @@
 <template>
-  <div class="app-container">
-    <el-table v-loading="listLoading" :data="list" element-loading-text="Loading" border fit highlight-current-row>
-      <el-table-column align="center" label="ID" width="95">
-        <template slot-scope="scope">
-          {{ scope.$index }}
-        </template>
-      </el-table-column>
-      <el-table-column label="Title">
-        <template slot-scope="scope">
-          {{ scope.row.title }}
-        </template>
-      </el-table-column>
-      <el-table-column label="Author" width="110" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.author }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="Pageviews" width="110" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.pageviews }}
-        </template>
-      </el-table-column>
-      <el-table-column class-name="status-col" label="Status" width="110" align="center">
-        <template slot-scope="scope">
-          <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="created_at" label="Display_time" width="200">
-        <template slot-scope="scope">
-          <i class="el-icon-time" />
-          <span>{{ scope.row.display_time }}</span>
-        </template>
-      </el-table-column>
-    </el-table>
-  </div>
+  <el-table v-loading="loading" :data="tableData" stripe style="width: 100%">
+    <el-table-column prop="userId" label="用户" width="180"> </el-table-column>
+    <el-table-column prop="value" label="值" width="180"> </el-table-column>
+    <el-table-column prop="note" label="备注"> </el-table-column>
+  </el-table>
 </template>
 
 <script>
-import { getList } from '@/api/table'
+import tableApi from '@/api/table'
 
 export default {
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'gray',
-        deleted: 'danger'
-      }
-      return statusMap[status]
-    }
-  },
   data() {
     return {
-      list: null,
-      listLoading: false
+      tableData: [],
+      loading: false
     }
   },
-  created() {
-    this.fetchData()
-  },
-  methods: {
-    fetchData() {}
+  mounted() {
+    this.loading = true
+    tableApi
+      .GetTableGetTableAll()
+      .then((res) => {
+        this.tableData = res.data.data
+        this.loading = false
+      })
+      .catch((e) => {
+        console.log(e)
+        this.loading = false
+      })
   }
 }
 </script>

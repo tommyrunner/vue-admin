@@ -83,7 +83,7 @@ export default {
     }
     return {
       loginForm: {
-        user: '1223758238@qq.com',
+        user: 'admin@qq.com',
         pwd: '123123',
         code: ''
       },
@@ -155,7 +155,7 @@ export default {
             })
             .catch((e) => {
               this.loading = false
-              this.$message.error({ message: e || 'Has Error' })
+              if (e) this.$message.error({ message: e })
             })
         } else {
           return false

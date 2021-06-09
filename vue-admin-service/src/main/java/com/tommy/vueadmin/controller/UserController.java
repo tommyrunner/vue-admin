@@ -84,4 +84,11 @@ public class UserController {
         return userService.loginOutService(token);
     }
 
+
+    @GetMapping("/getUserAll")
+    public Map<String, Object> getUserAll(HttpServletRequest request) {
+        log.debug("-------------------getUserAll:获取全部用户-------------");
+        String bearerToken = request.getHeader("Authorization");
+        return userService.getUserAllService(bearerToken);
+    }
 }

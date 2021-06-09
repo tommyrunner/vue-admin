@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.code.kaptcha.Producer;
+import com.tommy.vueadmin.aop.ApiUserAuth;
 import com.tommy.vueadmin.dao.UserDao;
 import com.tommy.vueadmin.dao.RolesDao;
 import com.tommy.vueadmin.entity.RolesEntity;
@@ -133,13 +134,10 @@ public class UserService {
             //自动过期时间-token错误/或者过期
             return ReturnDateUtil.returnData(ReturnDateUtil.CODE_ERROR_TOKEN, "身份错误或失效", null);
         } else {
-//            System.out.println("issuer: " + jwt.getIssuer());
-//            System.out.println("过期时间：      " + jwt.getExpiresAt());
+            //封装map
             Map<String, Object> userInfo = new HashMap<>();
             userInfo.put("userInfo", jwt.getClaim("userInfo").asString());
             userInfo.put("roles", jwt.getClaim("roles").asString());
-            //---
-            UserEntity userEntity = JSONObject.parseObject(jwt.getClaim("userInfo").asString(), UserEntity.class);
             return ReturnDateUtil.returnData(ReturnDateUtil.CODE_OK, "获取成功!", userInfo);
         }
     }
@@ -151,14 +149,17 @@ public class UserService {
             //自动过期时间-token错误/或者过期
             return ReturnDateUtil.returnData(ReturnDateUtil.CODE_ERROR_TOKEN, "身份错误或失效", null);
         } else {
-            Map<String, Object> userInfo = new HashMap<>();
-            userInfo.put("userInfo", jwt.getClaim("userInfo").asString());
-            userInfo.put("roles", jwt.getClaim("roles").asString());
-            //---
+            //获取转对象
             UserEntity userEntity = JSONObject.parseObject(jwt.getClaim("userInfo").asString(), UserEntity.class);
             //删除token
             redisTemplate.delete(userEntity.getUser());
             return ReturnDateUtil.returnData(ReturnDateUtil.CODE_OK, "操作成功!", userEntity.getUser());
         }
+    }
+    //获取所有用户
+    @ApiUserAuth(msg = "没有权限哦!",auth = "admin@qq.com")
+    public Map<String, Object> getUserAllService(String token) {
+        List<UserEntity> all = userDao.findAll();
+        return ReturnDateUtil.returnData(ReturnDateUtil.CODE_OK, "获取成功!", all);
     }
 }

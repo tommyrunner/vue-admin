@@ -50,6 +50,135 @@ export const request = (method, url, body, queryParameters, formData, config) =>
  ==========================================================*/
 const isArray = (val) => !!val && Array.isArray(val)
 /**
+ * deleteTable
+ * request: postTableDeleteTable
+ * url: postTableDeleteTableURL
+ * method: postTableDeleteTable_TYPE
+ * raw_url: postTableDeleteTable_RAW_URL
+ * @param tableEntity - tableEntity
+ */
+export const postTableDeleteTable = function(parameters = {}) {
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  const config = parameters.$config
+  let path = '/table/deleteTable'
+  let body = {};
+  let queryParameters = {};
+  let formData = new FormData();
+  if (parameters.$body) {
+    body = parameters.$body;
+  } else {
+    body = parameters
+  }
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    });
+  }
+  return request('post', domain + path, body, queryParameters, formData, config)
+}
+export const postTableDeleteTable_RAW_URL = function() {
+  return '/table/deleteTable'
+}
+export const postTableDeleteTable_TYPE = function() {
+  return 'post'
+}
+export const postTableDeleteTableURL = function(parameters = {}) {
+  let queryParameters = {}
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  let path = '/table/deleteTable'
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    })
+  }
+  let keys = Object.keys(queryParameters)
+  return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
+}
+/**
+ * getTableAll
+ * request: getTableGetTableAll
+ * url: getTableGetTableAllURL
+ * method: getTableGetTableAll_TYPE
+ * raw_url: getTableGetTableAll_RAW_URL
+ */
+export const getTableGetTableAll = function(parameters = {}) {
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  const config = parameters.$config
+  let path = '/table/getTableAll'
+  let body = {};
+  let queryParameters = {};
+  let formData = new FormData();
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    });
+  }
+  return request('get', domain + path, body, queryParameters, formData, config)
+}
+export const getTableGetTableAll_RAW_URL = function() {
+  return '/table/getTableAll'
+}
+export const getTableGetTableAll_TYPE = function() {
+  return 'get'
+}
+export const getTableGetTableAllURL = function(parameters = {}) {
+  let queryParameters = {}
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  let path = '/table/getTableAll'
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    })
+  }
+  let keys = Object.keys(queryParameters)
+  return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
+}
+/**
+ * saveTable
+ * request: postTableSaveTable
+ * url: postTableSaveTableURL
+ * method: postTableSaveTable_TYPE
+ * raw_url: postTableSaveTable_RAW_URL
+ * @param tableEntity - tableEntity
+ */
+export const postTableSaveTable = function(parameters = {}) {
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  const config = parameters.$config
+  let path = '/table/saveTable'
+  let body = {};
+  let queryParameters = {};
+  let formData = new FormData();
+  if (parameters.$body) {
+    body = parameters.$body;
+  } else {
+    body = parameters
+  }
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    });
+  }
+  return request('post', domain + path, body, queryParameters, formData, config)
+}
+export const postTableSaveTable_RAW_URL = function() {
+  return '/table/saveTable'
+}
+export const postTableSaveTable_TYPE = function() {
+  return 'post'
+}
+export const postTableSaveTableURL = function(parameters = {}) {
+  let queryParameters = {}
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  let path = '/table/saveTable'
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    })
+  }
+  let keys = Object.keys(queryParameters)
+  return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
+}
+/**
  * toError-返回错误
  * request: getToError
  * url: getToErrorURL
@@ -512,6 +641,45 @@ export const getUserCodeURL = function(parameters = {}) {
   return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
 }
 /**
+ * getUserAll
+ * request: getUserGetUserAll
+ * url: getUserGetUserAllURL
+ * method: getUserGetUserAll_TYPE
+ * raw_url: getUserGetUserAll_RAW_URL
+ */
+export const getUserGetUserAll = function(parameters = {}) {
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  const config = parameters.$config
+  let path = '/user/getUserAll'
+  let body = {};
+  let queryParameters = {};
+  let formData = new FormData();
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    });
+  }
+  return request('get', domain + path, body, queryParameters, formData, config)
+}
+export const getUserGetUserAll_RAW_URL = function() {
+  return '/user/getUserAll'
+}
+export const getUserGetUserAll_TYPE = function() {
+  return 'get'
+}
+export const getUserGetUserAllURL = function(parameters = {}) {
+  let queryParameters = {}
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  let path = '/user/getUserAll'
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    })
+  }
+  let keys = Object.keys(queryParameters)
+  return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
+}
+/**
  * getUserInfo
  * request: getUserGetUserInfo
  * url: getUserGetUserInfoURL
@@ -567,6 +735,7 @@ export const getUserGetUserInfoURL = function(parameters = {}) {
  * @param pwd - 用户密码
  * @param user - 用户
  * @param userMap - 接收对象
+ * @param uuid - 设备id
  */
 export const postUserLogin = function(parameters = {}) {
   const domain = parameters.$domain ? parameters.$domain : getDomain()
@@ -588,6 +757,9 @@ export const postUserLogin = function(parameters = {}) {
     body = parameters.$body;
   } else {
     body = parameters
+  }
+  if (parameters['uuid'] === undefined) {
+    return Promise.reject(new Error('Missing parameter : uuid'))
   }
   if (parameters.$queryParameters) {
     Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
