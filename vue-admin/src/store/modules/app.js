@@ -1,15 +1,17 @@
 import Cookies from 'js-cookie'
+import { constantRoutes } from '@/router'
 
 const state = {
   sidebar: {
     opened: Cookies.get('sidebarStatus') ? !!+Cookies.get('sidebarStatus') : true,
     withoutAnimation: false
   },
+  routes: [],
   device: 'desktop'
 }
 
 const mutations = {
-  TOGGLE_SIDEBAR: state => {
+  TOGGLE_SIDEBAR: (state) => {
     state.sidebar.opened = !state.sidebar.opened
     state.sidebar.withoutAnimation = false
     if (state.sidebar.opened) {
@@ -29,6 +31,13 @@ const mutations = {
 }
 
 const actions = {
+  GenerateRoutes({ commit }, data) {
+    return new Promise((resolve) => {
+      // const { roles } = data
+      commit('SET_ROUTES', constantRoutes)
+      resolve(constantRoutes)
+    })
+  },
   toggleSideBar({ commit }) {
     commit('TOGGLE_SIDEBAR')
   },
@@ -37,6 +46,12 @@ const actions = {
   },
   toggleDevice({ commit }, device) {
     commit('TOGGLE_DEVICE', device)
+  },
+  setLanguage({ commit }, language) {
+    commit('SET_LANGUAGE', language)
+  },
+  setSize({ commit }, size) {
+    commit('SET_SIZE', size)
   }
 }
 

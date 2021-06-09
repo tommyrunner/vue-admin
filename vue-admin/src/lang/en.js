@@ -1,15 +1,18 @@
 export default {
   loginPage: {
     title: 'vue-admin',
-    user: 'user',
-    pwd: 'password',
-    code: 'code',
-    login: 'login',
-    codeToast: 'is refresh !'
+    user: 'User',
+    pwd: 'Password',
+    code: 'Code',
+    login: 'Login',
+    codeToast: 'Is Refresh !'
   },
   layout: {
-    home: 'go Home',
-    loginOut: 'login out'
+    home: 'Go Home',
+    loginOut: 'Login out',
+    tagesClose: 'Close',
+    tagesCloseAll: 'Close All',
+    tagesCloseOthers: 'Close Others'
   },
   route: {
     Dashboard: 'Dashboard',

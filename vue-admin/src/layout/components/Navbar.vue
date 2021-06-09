@@ -35,9 +35,6 @@ export default {
     Breadcrumb,
     Hamburger
   },
-  mounted() {
-    console.log(this.userInfo)
-  },
   computed: {
     ...mapGetters(['sidebar', 'userInfo'])
   },

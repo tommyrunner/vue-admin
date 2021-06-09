@@ -84,8 +84,8 @@ export default {
     return {
       loginForm: {
         user: '1223758238@qq.com',
-        pwd: '123456',
-        code: '123'
+        pwd: '123123',
+        code: ''
       },
       loginRules: {
         user: [{ required: true, trigger: 'blur' }],

@@ -9,7 +9,10 @@ export default {
   },
   layout: {
     home: '主页',
-    loginOut: '登出'
+    loginOut: '登出',
+    tagesClose: '关闭',
+    tagesCloseAll: '关闭所有',
+    tagesCloseOthers: '关闭其他'
   },
   route: {
     Dashboard: '控制板',

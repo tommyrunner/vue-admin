@@ -61,7 +61,7 @@ const actions = {
             return reject(data.msg)
           }
           const { userInfo, roles } = data.data
-          commit('SET_USERINFO', userInfo)
+          commit('SET_USERINFO', JSON.parse(userInfo))
           commit('SET_ROLES', roles)
           resolve(data.data)
         })
