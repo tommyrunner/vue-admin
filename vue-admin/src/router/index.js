@@ -5,6 +5,9 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '@/layout'
+import managementRoute from './module/management'
+import tableRoute from './module/table'
+console.log(managementRoute)
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -30,6 +33,7 @@ import Layout from '@/layout'
  * a base page that does not have permission requirements
  * all roles can be accessed
  */
+export const rolesRoutes = [tableRoute, managementRoute]
 export const constantRoutes = [
   {
     path: '/login',
@@ -56,43 +60,7 @@ export const constantRoutes = [
       }
     ]
   },
-
-  {
-    path: '/data',
-    component: Layout,
-    redirect: '/example/table',
-    name: 'Data',
-    meta: { title: 'Data', icon: 'data' },
-    children: [
-      {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/data/table/index'),
-        meta: { title: 'Table', icon: 'table' }
-      }
-    ]
-  },
-  {
-    path: '/management',
-    component: Layout,
-    redirect: '/management/system',
-    name: 'Management',
-    meta: { title: 'Management', icon: 'management' },
-    children: [
-      {
-        path: 'system',
-        name: 'System',
-        component: () => import('@/views/management/system/index'),
-        meta: { title: 'System', icon: 'system' }
-      },
-      {
-        path: 'user',
-        name: 'User',
-        component: () => import('@/views/management/user/index'),
-        meta: { title: 'User', icon: 'user' }
-      }
-    ]
-  },
+  ...rolesRoutes,
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]

@@ -92,13 +92,13 @@ public class TokenFilter implements Filter {
                 redisTemplate.delete(userEntity.getUser());
                 return;
             }
-            //放行
-            filterChain.doFilter(servletRequest, servletResponse);
         } catch (Exception e) {
             System.out.println(e.toString());
-            log.debug("解析token错误:" + e.toString());
+            log.debug("解析token失败:" + e.toString());
             request.getRequestDispatcher("/toError?msg=解析token失败!&code=" + ReturnDateUtil.CODE_ERROR_TOKEN).forward(request, response);
         }
+        //放行
+        filterChain.doFilter(servletRequest, servletResponse);
 
     }
 }

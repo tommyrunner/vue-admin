@@ -50,6 +50,52 @@ export const request = (method, url, body, queryParameters, formData, config) =>
  ==========================================================*/
 const isArray = (val) => !!val && Array.isArray(val)
 /**
+ * getRolesByUserIdAll
+ * request: getRolesGetRolesByUserIdAll
+ * url: getRolesGetRolesByUserIdAllURL
+ * method: getRolesGetRolesByUserIdAll_TYPE
+ * raw_url: getRolesGetRolesByUserIdAll_RAW_URL
+ * @param userId - userId
+ */
+export const getRolesGetRolesByUserIdAll = function(parameters = {}) {
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  const config = parameters.$config
+  let path = '/roles/getRolesByUserIdAll'
+  let body = {};
+  let queryParameters = {};
+  let formData = new FormData();
+  if (parameters['userId'] !== undefined) {
+    queryParameters['userId'] = parameters['userId']
+  }
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    });
+  }
+  return request('get', domain + path, body, queryParameters, formData, config)
+}
+export const getRolesGetRolesByUserIdAll_RAW_URL = function() {
+  return '/roles/getRolesByUserIdAll'
+}
+export const getRolesGetRolesByUserIdAll_TYPE = function() {
+  return 'get'
+}
+export const getRolesGetRolesByUserIdAllURL = function(parameters = {}) {
+  let queryParameters = {}
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  let path = '/roles/getRolesByUserIdAll'
+  if (parameters['userId'] !== undefined) {
+    queryParameters['userId'] = parameters['userId']
+  }
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    })
+  }
+  let keys = Object.keys(queryParameters)
+  return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
+}
+/**
  * deleteTable
  * request: postTableDeleteTable
  * url: postTableDeleteTableURL
