@@ -1,19 +1,11 @@
 <template>
-  <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
-    <el-form :model="form">
-      <el-form-item label="活动名称" label-width="120px">
-        <el-input v-model="form.name" autocomplete="off"></el-input>
-      </el-form-item>
-      <el-form-item label="活动区域" label-width="120px">
-        <el-select v-model="form.region" placeholder="请选择活动区域">
-          <el-option label="区域一" value="shanghai"></el-option>
-          <el-option label="区域二" value="beijing"></el-option>
-        </el-select>
-      </el-form-item>
-    </el-form>
+  <el-dialog :title="title" :visible.sync="isShow" @close="cancel">
+    <div class="center">
+      <slot v-on="center" />
+    </div>
     <div slot="footer" class="dialog-footer">
-      <el-button @click="dialogFormVisible = false">取 消</el-button>
-      <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+      <el-button @click="cancel()">取 消</el-button>
+      <el-button type="primary" @click="sublimt()">提 交</el-button>
     </div>
   </el-dialog>
 </template>
@@ -21,10 +13,31 @@
 export default {
   data() {
     return {
-      dialogFormVisible: true,
-      form: {}
+      isShow: false,
+      title: ''
+    }
+  },
+  methods: {
+    showDialog(title) {
+      this.title = title
+      this.isShow = true
+    },
+    closeDialog() {
+      this.isShow = false
+    },
+    sublimt() {
+      this.$emit('sublimt')
+    },
+    cancel() {
+      this.closeDialog()
+      this.$emit('cancel')
     }
   }
 }
 </script>
-<style scoped></style>
+<style scoped lang="scss">
+.center {
+  max-height: 400px;
+  overflow: auto;
+}
+</style>
