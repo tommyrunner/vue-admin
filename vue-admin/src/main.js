@@ -19,6 +19,21 @@ import '@/permission' // permission control
 
 Vue.use(ElementUI)
 
+// // 判断Wb开头的组件加载 /Wb.*\.vue$/
+//返回的是以后函数接受req，传入keys[x]会返回一个module模块
+//module === 使用import导入的模块
+const requireComponent = require.context('./components', false, /Wb.*\.vue$/)
+// //全部注册
+requireComponent.keys().forEach((fileName) => {
+  //格式化名字，从./xxxx.vue获取为xxxx
+  const fileNames = fileName.split('./')
+  const componentName = fileNames[1].substring(0, fileNames[1].lastIndexOf('.'))
+  //获取组件
+  let componentConfig = requireComponent(fileName).default
+  //注册组件
+  Vue.component(componentName, componentConfig)
+})
+
 Vue.config.productionTip = false
 
 new Vue({
