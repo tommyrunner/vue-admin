@@ -13,4 +13,6 @@ import java.util.Map;
 public interface UserDao extends JpaRepository<UserEntity,Integer> {
     //通过user查询用户
     UserEntity findByUser(String user);
+    //批量查询用户
+    List<UserEntity> findUserEntitiesByIdIn(List<Integer> ids);
 }

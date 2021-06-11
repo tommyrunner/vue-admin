@@ -12,7 +12,8 @@ export default {
     loginOut: 'Login out',
     tagesClose: 'Close',
     tagesCloseAll: 'Close All',
-    tagesCloseOthers: 'Close Others'
+    tagesCloseOthers: 'Close Others',
+    loading: 'loading...'
   },
   route: {
     Dashboard: 'Dashboard',

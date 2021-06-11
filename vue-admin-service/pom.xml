@@ -16,6 +16,11 @@
     </properties>
 
     <dependencies>
+<!--        邮件发送-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
         <!-- 导入缓存redis-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

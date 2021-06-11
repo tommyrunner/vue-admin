@@ -596,51 +596,6 @@ export const patchToErrorURL = function(parameters = {}) {
   return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
 }
 /**
- * addUser
- * request: postUserAddUser
- * url: postUserAddUserURL
- * method: postUserAddUser_TYPE
- * raw_url: postUserAddUser_RAW_URL
- * @param userEntity - userEntity
- */
-export const postUserAddUser = function(parameters = {}) {
-  const domain = parameters.$domain ? parameters.$domain : getDomain()
-  const config = parameters.$config
-  let path = '/user/addUser'
-  let body = {};
-  let queryParameters = {};
-  let formData = new FormData();
-  if (parameters.$body) {
-    body = parameters.$body;
-  } else {
-    body = parameters
-  }
-  if (parameters.$queryParameters) {
-    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
-    });
-  }
-  return request('post', domain + path, body, queryParameters, formData, config)
-}
-export const postUserAddUser_RAW_URL = function() {
-  return '/user/addUser'
-}
-export const postUserAddUser_TYPE = function() {
-  return 'post'
-}
-export const postUserAddUserURL = function(parameters = {}) {
-  let queryParameters = {}
-  const domain = parameters.$domain ? parameters.$domain : getDomain()
-  let path = '/user/addUser'
-  if (parameters.$queryParameters) {
-    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
-    })
-  }
-  let keys = Object.keys(queryParameters)
-  return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
-}
-/**
  * loginCode
  * request: getUserCode
  * url: getUserCodeURL
@@ -678,6 +633,55 @@ export const getUserCodeURL = function(parameters = {}) {
   if (parameters['uuid'] !== undefined) {
     queryParameters['uuid'] = parameters['uuid']
   }
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    })
+  }
+  let keys = Object.keys(queryParameters)
+  return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
+}
+/**
+ * deleteUser
+ * request: postUserDeleteUser
+ * url: postUserDeleteUserURL
+ * method: postUserDeleteUser_TYPE
+ * raw_url: postUserDeleteUser_RAW_URL
+ * @param map - map
+ * @param userIds - 用户唯一id
+ */
+export const postUserDeleteUser = function(parameters = {}) {
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  const config = parameters.$config
+  let path = '/user/deleteUser'
+  let body = {};
+  let queryParameters = {};
+  let formData = new FormData();
+  if (parameters.$body) {
+    body = parameters.$body;
+  } else {
+    body = parameters
+  }
+  if (parameters['userIds'] === undefined) {
+    return Promise.reject(new Error('Missing parameter : userIds'))
+  }
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    });
+  }
+  return request('post', domain + path, body, queryParameters, formData, config)
+}
+export const postUserDeleteUser_RAW_URL = function() {
+  return '/user/deleteUser'
+}
+export const postUserDeleteUser_TYPE = function() {
+  return 'post'
+}
+export const postUserDeleteUserURL = function(parameters = {}) {
+  let queryParameters = {}
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  let path = '/user/deleteUser'
   if (parameters.$queryParameters) {
     Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
       queryParameters[parameterName] = parameters.$queryParameters[parameterName]
@@ -870,6 +874,51 @@ export const getUserLoginOutURL = function(parameters = {}) {
   if (parameters['token'] !== undefined) {
     queryParameters['token'] = parameters['token']
   }
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    })
+  }
+  let keys = Object.keys(queryParameters)
+  return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
+}
+/**
+ * saveUser
+ * request: postUserSaveUser
+ * url: postUserSaveUserURL
+ * method: postUserSaveUser_TYPE
+ * raw_url: postUserSaveUser_RAW_URL
+ * @param userEntity - userEntity
+ */
+export const postUserSaveUser = function(parameters = {}) {
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  const config = parameters.$config
+  let path = '/user/saveUser'
+  let body = {};
+  let queryParameters = {};
+  let formData = new FormData();
+  if (parameters.$body) {
+    body = parameters.$body;
+  } else {
+    body = parameters
+  }
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    });
+  }
+  return request('post', domain + path, body, queryParameters, formData, config)
+}
+export const postUserSaveUser_RAW_URL = function() {
+  return '/user/saveUser'
+}
+export const postUserSaveUser_TYPE = function() {
+  return 'post'
+}
+export const postUserSaveUserURL = function(parameters = {}) {
+  let queryParameters = {}
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  let path = '/user/saveUser'
   if (parameters.$queryParameters) {
     Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
       queryParameters[parameterName] = parameters.$queryParameters[parameterName]

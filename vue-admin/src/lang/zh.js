@@ -12,7 +12,8 @@ export default {
     loginOut: '登出',
     tagesClose: '关闭',
     tagesCloseAll: '关闭所有',
-    tagesCloseOthers: '关闭其他'
+    tagesCloseOthers: '关闭其他',
+    loading: '加载中...'
   },
   route: {
     Dashboard: '控制板',

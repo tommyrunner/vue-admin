@@ -19,7 +19,6 @@ public class RolesService {
 
 //    根据用户ui查询权限
     public Map<String,Object> getRolesByUserIdAllService(int userId){
-        if()
-       return ReturnDateUtil.returnData(ReturnDateUtil.CODE_OK,"获取成功!",rolesDao.findUserIdToRolesEntity(userId));
+       return ReturnDateUtil.returnData(ReturnDateUtil.CODE_OK,"获取成功!",rolesDao.findRolesByUserId(userId));
     }
 }

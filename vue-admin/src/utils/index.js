@@ -1,3 +1,5 @@
+import { Loading } from 'element-ui'
+import i18n from '@/lang/i18n'
 /**
  * Created by PanJiaChen on 16/11/18.
  */
@@ -118,4 +120,18 @@ export function generateUUID(withSeparator = true) {
     d = Math.floor(d / 16)
     return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16)
   })
+}
+
+//定义全局加载动画
+export function $Loading() {
+  return Loading.service({
+    lock: true,
+    text: i18n.t('layout.loading'),
+    spinner: 'el-icon-loading',
+    background: 'rgba(0, 0, 0, 0.7)'
+  })
+}
+//校验-判断邮箱
+export function isEmail(s) {
+  return /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((.[a-zA-Z0-9_-]{2,3}){1,2})$/.test(s)
 }

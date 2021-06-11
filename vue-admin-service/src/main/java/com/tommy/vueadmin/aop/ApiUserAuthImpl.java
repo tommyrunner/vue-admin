@@ -69,16 +69,4 @@ public class ApiUserAuthImpl {
             throw new RuntimeException("错误");
         }
     }
-
-    //指定自己的获取key的规则
-    private String getKey(String key,Object[] args) {
-        StringBuilder keyBuilder = new StringBuilder(key);
-        for (int i = 0; i < args.length; i++) {
-            keyBuilder.append(":").append(args[i].toString());
-            System.out.println("获取数据---"+ keyBuilder +","+args[i].toString());
-        }
-        key = keyBuilder.toString();
-
-        return key;
-    }
 }

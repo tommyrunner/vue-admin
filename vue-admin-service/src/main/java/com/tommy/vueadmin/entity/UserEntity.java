@@ -19,10 +19,12 @@ public class UserEntity implements Serializable {
     String name;
     @Column(nullable = false)
     String pwd;
-    @Column(nullable = false)
+    @Column(nullable = true)
     String system_theme;
-    @Column(nullable = false)
+    @Column(nullable = true)
     String system_lang;
+    @Column(nullable = false)
+    boolean isDel;
     @Column(nullable = false)
     String note;
 }

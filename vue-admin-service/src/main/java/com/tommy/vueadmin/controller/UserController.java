@@ -20,6 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -37,9 +39,8 @@ public class UserController {
     UserService userService;    //用户service
 
 
-
     @GetMapping("/code")
-    public void loginCode(HttpServletResponse response,String uuid) {
+    public void loginCode(HttpServletResponse response, String uuid) {
         log.debug("-------------------loginCode:获取验证码-------------");
         try {
             BufferedImage bufferedImage = userService.loginCodeService(response, uuid);
@@ -50,10 +51,11 @@ public class UserController {
         }
     }
 
-    @PostMapping("/addUser")
-    public Map<String, Object> addUser(@RequestBody(required =  false) UserEntity userEntity) {
+    @PostMapping("/saveUser")
+    public Map<String, Object> saveUser(HttpServletRequest request,@RequestBody(required = false) UserEntity userEntity) {
         log.debug("-------------------PostMapping:添加用户-------------");
-        return userService.addUserService(userEntity);
+        String bearerToken = request.getHeader("Authorization");
+        return userService.saveUserService(bearerToken,userEntity);
     }
 
     @PostMapping("/login")
@@ -68,6 +70,7 @@ public class UserController {
             @ApiParam(value = "接收对象", name = "userMap", required = true)
             @RequestBody(required = false) Map<String, Object> userMap) {
         log.debug("-------------------userLogin:用户登录-------------");
+        userService.sendUserEmail("1223758238@qq.com");
         return userService.loginUserService(userMap);
 
     }
@@ -90,5 +93,17 @@ public class UserController {
         log.debug("-------------------getUserAll:获取全部用户-------------");
         String bearerToken = request.getHeader("Authorization");
         return userService.getUserAllService(bearerToken);
+    }
+
+    @PostMapping("/deleteUser")
+    //必传参数,提示客户端
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "用户唯一id", name = "userIds", required = true),
+    })
+    public Map<String, Object> deleteUser(HttpServletRequest request, @RequestBody(required = false) Map<String, List<Integer>> map) {
+        log.debug("-------------------getUserAll:获取全部用户-------------");
+        List<Integer> userIds = map.get("userIds");
+        String bearerToken = request.getHeader("Authorization");
+        return userService.deleteUserService(bearerToken, userIds);
     }
 }

@@ -6,6 +6,8 @@ import {
   getUserGetUserInfo,
   getUserLoginOut,
   getUserGetUserAll,
+  postUserSaveUser,
+  postUserDeleteUser,
   getRolesGetRolesByUserIdAll
 } from 'tommy-vueadmin-sdk'
 //修改请求头
@@ -30,7 +32,14 @@ const GetUserInfo = (params) => {
 const GetUserLoginOut = (params) => {
   return getUserLoginOut(params)
 }
-
+// 保存/修改用户
+const PostUserSaveUser = (params) => {
+  return postUserSaveUser(params)
+}
+// 批量删除用户
+const PostUserDeleteUser = (params) => {
+  return postUserDeleteUser(params)
+}
 // 获取所有用户
 const GetUserGetUserAll = (params) => {
   return getUserGetUserAll(params)
@@ -45,5 +54,7 @@ export default {
   GetUserInfo,
   GetUserLoginOut,
   GetUserGetUserAll,
+  PostUserSaveUser,
+  PostUserDeleteUser,
   GetRolesByUserIdAll
 }

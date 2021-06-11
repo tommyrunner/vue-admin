@@ -7,9 +7,11 @@ import com.google.code.kaptcha.Producer;
 import com.tommy.vueadmin.aop.ApiUserAuth;
 import com.tommy.vueadmin.dao.UserDao;
 import com.tommy.vueadmin.dao.RolesDao;
+import com.tommy.vueadmin.dao.UserRolesDao;
 import com.tommy.vueadmin.entity.RolesEntity;
 import com.tommy.vueadmin.entity.TokenEntity;
 import com.tommy.vueadmin.entity.UserEntity;
+import com.tommy.vueadmin.utils.DataBase;
 import com.tommy.vueadmin.utils.ReturnDateUtil;
 import com.tommy.vueadmin.utils.TokenUtil;
 import io.swagger.models.auth.In;
@@ -17,17 +19,20 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * @Author Tommy
@@ -42,11 +47,16 @@ public class UserService {
     @Autowired
     RolesDao rolesDao;
     @Autowired
+    UserRolesDao userRolesDao;//用户和权限关系表
+    @Autowired
     RedisTemplate redisTemplate;     //redis k-v操作字符串
     @Autowired
     private Producer producer;  //生成图片验证码
-//    验证码
-    public BufferedImage loginCodeService(HttpServletResponse response, String uuid){
+    @Autowired
+    private JavaMailSender javaMailSender;  //发送邮箱
+
+    //    验证码
+    public BufferedImage loginCodeService(HttpServletResponse response, String uuid) {
         response.setHeader("Cache-Control", "no-store, no-cache");
         response.setContentType("image/jpeg");
         //生成文字验证码
@@ -58,27 +68,15 @@ public class UserService {
         //生成图片验证码
         BufferedImage image = producer.createImage(s1 + "*" + s2 + "=?");
         //保存 redis key 自己设置
-        redisTemplate.opsForValue().set(uuid,count, 1, TimeUnit.MINUTES);
-        return  image;
+        redisTemplate.opsForValue().set(uuid, count, 1, TimeUnit.MINUTES);
+        return image;
     }
 
-    //添加用户
-    public Map<String,Object> addUserService(UserEntity userEntity){
-        //校验
-        UserEntity byUser = userDao.findByUser(userEntity.getUser());
-        if(byUser!=null){
-            return ReturnDateUtil.returnData(ReturnDateUtil.CODE_ERROR, "用户已经存在", null);
-        }
-        //密码加密
-        userEntity.setPwd(DigestUtils.md5DigestAsHex(userEntity.getPwd().getBytes()));
-        UserEntity save = userDao.save(userEntity);
-        return ReturnDateUtil.returnData(ReturnDateUtil.CODE_OK, "添加成功!", save.getUser());
-    }
 
     //登录
     public Map<String, Object> loginUserService(Map<String, Object> userMap) {
         //校验
-        if (userMap == null || userMap.get("user") == null || userMap.get("pwd") == null || userMap.get("code") == null|| userMap.get("uuid") == null) {
+        if (userMap == null || userMap.get("user") == null || userMap.get("pwd") == null || userMap.get("code") == null || userMap.get("uuid") == null) {
             return ReturnDateUtil.returnData(ReturnDateUtil.CODE_ERROR_PARA, "缺少参数", null);
         }
         String user = (String) userMap.get("user");
@@ -86,19 +84,19 @@ public class UserService {
         String code = (String) userMap.get("code");
         String uuid = (String) userMap.get("uuid");
         Object o = redisTemplate.opsForValue().get(uuid);
-        if(o==null){
+        if (o == null) {
             return ReturnDateUtil.returnData(ReturnDateUtil.CODE_ERROR_PARA, "验证码错误,请刷新验证码!", null);
         }
-        int uuidValue = (Integer)o;
-        if(uuidValue != Integer.parseInt(code)){
+        int uuidValue = (Integer) o;
+        if (uuidValue != Integer.parseInt(code)) {
             return ReturnDateUtil.returnData(ReturnDateUtil.CODE_ERROR_PARA, "验证答案错误!", null);
 
         }
-        if ("".equals(user) || "".equals(pwd) || "".equals(code)||"".equals(uuid)) {
+        if ("".equals(user) || "".equals(pwd) || "".equals(code) || "".equals(uuid)) {
             return ReturnDateUtil.returnData(ReturnDateUtil.CODE_ERROR_PARA, "参数不能为空", null);
         }
         //获取uuid验证验证码
-        if(uuid.equals("")){
+        if (uuid.equals("")) {
             return ReturnDateUtil.returnData(ReturnDateUtil.CODE_ERROR_PARA, "缺少设备!", null);
         }
         //从redis获取验证码答案
@@ -116,7 +114,7 @@ public class UserService {
         //去掉不需要显示内容
         byUser.setPwd("*********");
         //获取用户权限
-        List<RolesEntity> rolesUsers = rolesDao.findUserIdToRolesEntity(byUser.getId());
+        List<RolesEntity> rolesUsers = rolesDao.findRolesByUserId(byUser.getId());
         //生成token
         String token = TokenUtil.sign(byUser, rolesUsers);
         //cun
@@ -156,10 +154,96 @@ public class UserService {
             return ReturnDateUtil.returnData(ReturnDateUtil.CODE_OK, "操作成功!", userEntity.getUser());
         }
     }
+
     //获取所有用户
-    @ApiUserAuth(msg = "没有权限哦!",auth = "admin@qq.com")
+    @ApiUserAuth(msg = "没有权限哦!", auth = DataBase.ADMIN_USERNAME)
     public Map<String, Object> getUserAllService(String token) {
         List<UserEntity> all = userDao.findAll();
-        return ReturnDateUtil.returnData(ReturnDateUtil.CODE_OK, "获取成功!", all);
+        //过滤
+        List<UserEntity> collect = all.stream().filter(item->{
+            item.setPwd("************");
+            return !item.isDel();
+        }).collect(Collectors.toList());
+
+        return ReturnDateUtil.returnData(ReturnDateUtil.CODE_OK, "获取成功!", collect);
+    }
+
+    //添加修改-用户
+    @ApiUserAuth(msg = "没有权限哦!", auth = DataBase.ADMIN_USERNAME)
+    public Map<String, Object> saveUserService(String token,UserEntity userEntity) {
+        //校验
+        UserEntity byUser = userDao.findByUser(userEntity.getUser());
+
+        if (userEntity.getUser().equals(DataBase.ADMIN_USERNAME)) {
+            return ReturnDateUtil.returnData(ReturnDateUtil.CODE_ERROR, "不能操作超级用户!", null);
+        }
+        //判断是否添加还是修改
+        boolean isAdd = userEntity.getId()==0;
+        if (isAdd && byUser != null) {
+            return ReturnDateUtil.returnData(ReturnDateUtil.CODE_ERROR, "用户已经存在", null);
+        }
+        //密码加密
+        userEntity.setPwd(DigestUtils.md5DigestAsHex(userEntity.getPwd().getBytes()));
+        UserEntity save = userDao.save(userEntity);
+        return ReturnDateUtil.returnData(ReturnDateUtil.CODE_OK, isAdd?"添加成功!":"修改成功!", save.getUser());
+    }
+    //根据用户邮件生成验证码,并保存redis
+    public Map<String ,Object> sendUserEmail(String email){
+        //校验
+        Matcher emailMatcher = Pattern.compile("^\\s*?(.+)@(.+?)\\s*$").matcher(email);
+        if (!emailMatcher.matches()) {
+            return ReturnDateUtil.returnData(ReturnDateUtil.CODE_ERROR, "错误的邮箱", null);
+        }
+        UserEntity byUser = userDao.findByUser(email);
+        if(byUser != null){
+            return ReturnDateUtil.returnData(ReturnDateUtil.CODE_ERROR, "用户已经存在!", null);
+        }
+        Object o = redisTemplate.opsForValue().get("tommy-email-"+email);
+        if(o != null){
+            return ReturnDateUtil.returnData(ReturnDateUtil.CODE_ERROR, "不能重复获取验证码!", null);
+        }
+        //邮箱接口实例
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        //发送邮箱号
+        simpleMailMessage.setFrom("1223758238@qq.com");
+        //接收邮箱号
+        simpleMailMessage.setTo(email);
+        //主题（标题)
+        simpleMailMessage.setSubject("验证码");
+        //生成四位数验证码
+        String code = String.valueOf(new Random().nextInt(9999));
+        //主体内容
+        simpleMailMessage.setText(String.format("[%s]尊敬的用户，本次验证码:%s，有效期60秒。",email,code));
+        //发送
+        javaMailSender.send(simpleMailMessage);
+        //保存验证码
+        //保存 redis key 自己设置
+        redisTemplate.opsForValue().set("tommy-email-"+email, code, 1, TimeUnit.MINUTES);
+        return ReturnDateUtil.returnData(ReturnDateUtil.CODE_OK, "发送成功,60秒后才能重新发送!", null);
+    }
+
+    //批量删除用户
+    @ApiUserAuth(msg = "没有权限哦!", auth = DataBase.ADMIN_USERNAME)
+    @Transactional
+    public Map<String, Object> deleteUserService(String token, List<Integer> userIds) {
+        List<UserEntity> userEntitiesByIdIn = userDao.findUserEntitiesByIdIn(userIds);
+        for (UserEntity userEntity : userEntitiesByIdIn) {
+            if (userEntity == null) {
+                return ReturnDateUtil.returnData(ReturnDateUtil.CODE_ERROR, "用户不存在!", null);
+            }
+            if (userEntity.getUser().equals(DataBase.ADMIN_USERNAME)) {
+                return ReturnDateUtil.returnData(ReturnDateUtil.CODE_ERROR, "不能操作超级用户!", null);
+            }
+            if (userEntity.isDel()) {
+                return ReturnDateUtil.returnData(ReturnDateUtil.CODE_ERROR, "用户已被删除!", null);
+            }
+            //修改删除用户
+            userEntity.setDel(true);
+        }
+//      批量保存
+        userDao.saveAll(userEntitiesByIdIn);
+//        //删除关于用户的权限
+        userRolesDao.deleteUserRolesEntitiesByUserIdIn(userIds);
+        return ReturnDateUtil.returnData(ReturnDateUtil.CODE_OK, "删除成功!", userIds);
     }
 }
