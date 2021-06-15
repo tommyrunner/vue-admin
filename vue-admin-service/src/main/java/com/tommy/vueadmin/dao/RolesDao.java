@@ -30,4 +30,7 @@ public interface RolesDao extends JpaRepository<RolesEntity,Integer> {
     String SQL2 = "select r.id, r.icon,r.title,r.roles,r.path,r.note from tb_user_roles ur,tb_roles r where ur.roles_id = r.id and ur.user_id = :userId";
     @Query(value=SQL2,nativeQuery=true)
     List<RolesEntity> deleteRolesByUserId(@Param("userId") Integer userId);
+
+    //批量查询用户权限
+    List<RolesEntity> findRolesEntitiesByRolesIn(List<String> roles);
 }

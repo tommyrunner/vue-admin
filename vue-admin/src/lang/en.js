@@ -18,9 +18,10 @@ export default {
   route: {
     Dashboard: 'Dashboard',
     Data: 'Example',
-    Table: 'Table',
-    System: 'System',
+    DataTable: 'Table',
+    ManagementSystem: 'System',
     Management: 'Management',
-    User: 'User'
+    ManagementUser: 'User',
+    ManagementRoles: 'Roles'
   }
 }

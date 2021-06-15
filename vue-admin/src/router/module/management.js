@@ -9,15 +9,21 @@ const managementRoute = {
   children: [
     {
       path: 'system',
-      name: 'System',
+      name: 'ManagementSystem',
       component: () => import('@/views/management/system/index'),
-      meta: { title: 'System', icon: 'system' }
+      meta: { title: 'ManagementSystem', icon: 'system' }
     },
     {
       path: 'user',
-      name: 'User',
+      name: 'ManagementUser',
       component: () => import('@/views/management/user/index'),
-      meta: { title: 'User', icon: 'user' }
+      meta: { title: 'ManagementUser', icon: 'user' }
+    },
+    {
+      path: 'roles',
+      name: 'ManagementRoles',
+      component: () => import('@/views/management/roles/index'),
+      meta: { title: 'ManagementRoles', icon: 'roles' }
     }
   ]
 }

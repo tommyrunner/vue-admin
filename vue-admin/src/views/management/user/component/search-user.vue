@@ -9,13 +9,10 @@
           <el-col :span="3">
             <el-input v-model="form.name" size="mini" placeholder="名称"></el-input>
           </el-col>
-          <el-col :span="3">
-            <el-input v-model="form.note" size="mini" placeholder="备注"></el-input>
-          </el-col>
           <el-col :span="3" :offset="12">
             <div class="btn">
-              <el-button icon="el-icon-search" circle></el-button>
-              <el-button type="warning" icon="el-icon-refresh" circle></el-button>
+              <el-button icon="el-icon-search" circle @click="search"></el-button>
+              <el-button type="warning" icon="el-icon-refresh" circle @click="refresh"></el-button>
               <el-button type="primary" @click="showOpen" :icon="isOpen ? 'el-icon-caret-top' : 'el-icon-caret-bottom'" circle></el-button>
             </div>
           </el-col>
@@ -29,8 +26,16 @@ export default {
   name: 'SearchUser',
   data() {
     return {
-      form: {},
-      isOpen: false
+      form: this.initForm(),
+      isOpen: false,
+      searchParams: {
+        page: 1,
+        pageSize: 2,
+        sort: 'DESC',
+        sortKey: 'id',
+        user: '',
+        name: ''
+      }
     }
   },
   methods: {
@@ -39,6 +44,20 @@ export default {
         this.isOpen = !this.isOpen
         this.$refs.wbHeadSearch.showAnimation(this.isOpen)
       })
+    },
+    refresh() {
+      this.form = this.initForm()
+      this.$emit('onRefresh', this.searchParams)
+    },
+    search() {
+      this.searchParams = Object.assign(this.searchParams, this.form)
+      this.$emit('onSearch', this.searchParams)
+    },
+    initForm() {
+      return {
+        user: '',
+        name: ''
+      }
     }
   }
 }

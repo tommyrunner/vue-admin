@@ -9,9 +9,9 @@ const tableRoute = {
   children: [
     {
       path: 'table',
-      name: 'Table',
+      name: 'DataTable',
       component: () => import('@/views/data/table/index'),
-      meta: { title: 'Table', icon: 'table' }
+      meta: { title: 'DataTable', icon: 'table' }
     }
   ]
 }

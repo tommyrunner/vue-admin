@@ -66,7 +66,7 @@ public class ApiUserAuthImpl {
             return pjp.proceed();  //继续执行
         } catch (Throwable throwable) {
             throwable.printStackTrace();
-            throw new RuntimeException("错误");
+            throw new RuntimeException("错误:"+throwable.toString());
         }
     }
 }

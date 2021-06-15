@@ -18,9 +18,10 @@ export default {
   route: {
     Dashboard: '控制板',
     Data: '数据',
-    Table: '表格',
-    System: '系统',
+    DataTable: '表格',
+    ManagementSystem: '系统',
     Management: '管理',
-    User: '用户'
+    ManagementUser: '用户',
+    ManagementRoles: '菜单'
   }
 }

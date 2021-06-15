@@ -11,7 +11,8 @@ import java.util.List;
  * 2021/6/11
  */
 public interface UserRolesDao extends JpaRepository<UserRolesEntity,Integer> {
-    //批量查询用户
+    //批量删除用户权限
     void deleteUserRolesEntitiesByUserIdIn(List<Integer> userIds);
-
+    //根据用户id删除
+    void deleteAllByUserId(int userId);
 }

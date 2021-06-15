@@ -1,17 +1,12 @@
 package com.tommy.vueadmin.controller;
 
-import com.google.code.kaptcha.Producer;
 import com.tommy.vueadmin.entity.UserEntity;
 import com.tommy.vueadmin.service.UserService;
-import com.tommy.vueadmin.utils.ReturnDateUtil;
-import com.tommy.vueadmin.utils.TokenUtil;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
@@ -20,10 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @Author Tommy
@@ -50,12 +43,19 @@ public class UserController {
             e.printStackTrace();
         }
     }
-
+    @GetMapping("/sendEmail")
+    public Map<String,Object> sendUserEmail(HttpServletRequest request,String email) {
+        log.debug("-------------------sendUserEmail:发送邮件-------------");
+        String bearerToken = request.getHeader("Authorization");
+        return userService.sendUserEmail(bearerToken,email);
+    }
     @PostMapping("/saveUser")
-    public Map<String, Object> saveUser(HttpServletRequest request,@RequestBody(required = false) UserEntity userEntity) {
+    public Map<String, Object> saveUser(HttpServletRequest request,
+                                        @RequestBody(required = false) UserEntity userEntity,
+                                        String code) {
         log.debug("-------------------PostMapping:添加用户-------------");
         String bearerToken = request.getHeader("Authorization");
-        return userService.saveUserService(bearerToken,userEntity);
+        return userService.saveUserService(bearerToken,userEntity,code);
     }
 
     @PostMapping("/login")
@@ -70,9 +70,7 @@ public class UserController {
             @ApiParam(value = "接收对象", name = "userMap", required = true)
             @RequestBody(required = false) Map<String, Object> userMap) {
         log.debug("-------------------userLogin:用户登录-------------");
-        userService.sendUserEmail("1223758238@qq.com");
         return userService.loginUserService(userMap);
-
     }
 
     @GetMapping("/getUserInfo")
@@ -88,11 +86,20 @@ public class UserController {
     }
 
 
-    @GetMapping("/getUserAll")
-    public Map<String, Object> getUserAll(HttpServletRequest request) {
+    @PostMapping("/getUserAll")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "当前页", name = "page", required = true),
+            @ApiImplicitParam(value = "一页多少个", name = "pageSize", required = true),
+            @ApiImplicitParam(value = "升降序", name = "sort", required = true),
+            @ApiImplicitParam(value = "升降序的键", name = "sortKey", required = true),
+            @ApiImplicitParam(value = "模糊搜索-user", name = "user", required = false),
+            @ApiImplicitParam(value = "模糊搜索-name", name = "name", required = false),
+    })
+    public Map<String, Object> getUserAll(HttpServletRequest request,
+                                          @RequestBody(required = false) Map<String,Object> map) {
         log.debug("-------------------getUserAll:获取全部用户-------------");
         String bearerToken = request.getHeader("Authorization");
-        return userService.getUserAllService(bearerToken);
+        return userService.getUserAllService(bearerToken,map);
     }
 
     @PostMapping("/deleteUser")
@@ -105,5 +112,12 @@ public class UserController {
         List<Integer> userIds = map.get("userIds");
         String bearerToken = request.getHeader("Authorization");
         return userService.deleteUserService(bearerToken, userIds);
+    }
+    //重置密码
+    @GetMapping("/resetUserPwd")
+    public Map<String, Object> resetUserPwd(HttpServletRequest request,int userId) {
+        log.debug("-------------------getUserAll:获取全部用户-------------");
+        String bearerToken = request.getHeader("Authorization");
+        return userService.resetUserPwdService(bearerToken,userId);
     }
 }

@@ -3,7 +3,7 @@
     <el-form ref="form" :rules="rules" :model="form" label-width="80px">
       <transition-group name="my">
         <el-form-item label="账号" prop="user" :key="'user'">
-          <el-input v-model="form.user" placeholder="请输入邮箱"></el-input>
+          <el-input v-model="form.user" :disabled="!isEdit" placeholder="请输入邮箱"></el-input>
         </el-form-item>
         <el-form-item label="名称" prop="name" :key="'name'">
           <el-input v-model="form.name" placeholder="请输入名称"></el-input>
@@ -35,8 +35,10 @@
   </wb-dialog>
 </template>
 <script>
+import userApi from '@/api/user'
 import { rolesRoutes } from '@/router'
-import { isEmail } from '@/utils'
+import { isEmail, $Loading } from '@/utils'
+
 export default {
   name: 'EditUser',
   data() {
@@ -76,16 +78,31 @@ export default {
   methods: {
     //获取注册验证码
     getSaveCode() {
-      let time = 60
-      clearInterval(this.appInterval)
-      this.saveCodeToast = time-- + '秒'
-      this.appInterval = setInterval(() => {
-        this.saveCodeToast = time-- + '秒'
-        if (time === 0) {
-          this.saveCodeToast = '获取验证码'
-          clearInterval(this.appInterval)
-        }
-      }, 1000)
+      //发送验证码
+      const loading = $Loading()
+      userApi
+        .GetUserSendEmail({ email: this.form.user })
+        .then((res) => {
+          const { data } = res
+          loading.close()
+          if (data.code == 200) {
+            this.$message.success(data.msg)
+            let time = 60
+            clearInterval(this.appInterval)
+            this.saveCodeToast = time-- + '秒'
+            this.appInterval = setInterval(() => {
+              this.saveCodeToast = time-- + '秒'
+              if (time === 0) {
+                this.saveCodeToast = '获取验证码'
+                clearInterval(this.appInterval)
+              }
+            }, 1000)
+          }
+        })
+        .catch((e) => {
+          loading.close()
+          this.$message.error(String(e))
+        })
     },
     //校验邮箱rules
     validateEmail(rule, value, callback) {
@@ -147,7 +164,7 @@ export default {
     sublimt() {
       this.$refs['form'].validate((valid) => {
         if (valid) {
-          this.$emit('Submit', this.form)
+          this.$emit('Submit', { form: this.form, rolesAll: this.defSelectRoels })
         } else {
           return false
         }

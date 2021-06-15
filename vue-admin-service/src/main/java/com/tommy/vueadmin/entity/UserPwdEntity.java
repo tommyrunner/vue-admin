@@ -7,23 +7,23 @@ import java.io.Serializable;
 
 /**
  * @Author Tommy
- * 2021/6/6
+ * 2021/6/15
  */
 @Entity
-@Table(name = "tb_roles",uniqueConstraints=@UniqueConstraint(columnNames={"id", "roles"}))
+@Table(name = "tb_user_pwd", uniqueConstraints=@UniqueConstraint(columnNames={"id", "userId"}))
 @Data
-public class RolesEntity implements Serializable {
+//用户
+public class UserPwdEntity implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    int Id;
     @Column(nullable = false)
-    String roles;
+    int userId;
     @Column(nullable = false)
-    String path;
+    String pwd;
     @Column(nullable = false)
-    String icon;
-    @Column(nullable = false)
-    String title;
-    @Column(nullable = false)
+    String createTime;
+    @Column
     String note;
 }

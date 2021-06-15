@@ -5,10 +5,13 @@ import {
   getUserCode,
   getUserGetUserInfo,
   getUserLoginOut,
-  getUserGetUserAll,
+  postUserGetUserAll,
   postUserSaveUser,
   postUserDeleteUser,
-  getRolesGetRolesByUserIdAll
+  getRolesGetRolesByUserIdAll,
+  getUserSendEmail,
+  postRolesSaveRolesByUserId,
+  getUserResetUserPwd
 } from 'tommy-vueadmin-sdk'
 //修改请求头
 import { setApi } from './index'
@@ -18,6 +21,10 @@ setApi(getAxiosInstance, setDomain, '')
 // 获取登录验证图片
 const GetUserCode = (params) => {
   return getUserCode(params)
+}
+// 发送验证码
+const GetUserSendEmail = (params) => {
+  return getUserSendEmail(params)
 }
 // 用户登录
 const UserLogin = (params) => {
@@ -41,20 +48,31 @@ const PostUserDeleteUser = (params) => {
   return postUserDeleteUser(params)
 }
 // 获取所有用户
-const GetUserGetUserAll = (params) => {
-  return getUserGetUserAll(params)
+const PostUserGetUserAll = (params) => {
+  return postUserGetUserAll(params)
 }
 // 根据用户id获取权限
 const GetRolesByUserIdAll = (params) => {
   return getRolesGetRolesByUserIdAll(params)
 }
+// 根据用户id批量添加权限
+const PostRolesSaveRolesByUserId = (params) => {
+  return postRolesSaveRolesByUserId(params)
+}
+// 重置密码
+const GetUserResetUserPwd = (params) => {
+  return getUserResetUserPwd(params)
+}
 export default {
   UserLogin,
+  GetUserSendEmail,
   GetUserCode,
   GetUserInfo,
   GetUserLoginOut,
-  GetUserGetUserAll,
+  PostUserGetUserAll,
   PostUserSaveUser,
   PostUserDeleteUser,
-  GetRolesByUserIdAll
+  GetRolesByUserIdAll,
+  PostRolesSaveRolesByUserId,
+  GetUserResetUserPwd
 }

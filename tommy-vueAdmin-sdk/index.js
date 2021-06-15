@@ -96,6 +96,59 @@ export const getRolesGetRolesByUserIdAllURL = function(parameters = {}) {
   return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
 }
 /**
+ * saveRolesByUserId
+ * request: postRolesSaveRolesByUserId
+ * url: postRolesSaveRolesByUserIdURL
+ * method: postRolesSaveRolesByUserId_TYPE
+ * raw_url: postRolesSaveRolesByUserId_RAW_URL
+ * @param map - map
+ * @param rolesAll - 权限列表Roles
+ * @param userId - 用户唯一id
+ */
+export const postRolesSaveRolesByUserId = function(parameters = {}) {
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  const config = parameters.$config
+  let path = '/roles/saveRolesByUserId'
+  let body = {};
+  let queryParameters = {};
+  let formData = new FormData();
+  if (parameters.$body) {
+    body = parameters.$body;
+  } else {
+    body = parameters
+  }
+  if (parameters['rolesAll'] === undefined) {
+    return Promise.reject(new Error('Missing parameter : rolesAll'))
+  }
+  if (parameters['userId'] === undefined) {
+    return Promise.reject(new Error('Missing parameter : userId'))
+  }
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    });
+  }
+  return request('post', domain + path, body, queryParameters, formData, config)
+}
+export const postRolesSaveRolesByUserId_RAW_URL = function() {
+  return '/roles/saveRolesByUserId'
+}
+export const postRolesSaveRolesByUserId_TYPE = function() {
+  return 'post'
+}
+export const postRolesSaveRolesByUserIdURL = function(parameters = {}) {
+  let queryParameters = {}
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  let path = '/roles/saveRolesByUserId'
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    })
+  }
+  let keys = Object.keys(queryParameters)
+  return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
+}
+/**
  * deleteTable
  * request: postTableDeleteTable
  * url: postTableDeleteTableURL
@@ -692,32 +745,56 @@ export const postUserDeleteUserURL = function(parameters = {}) {
 }
 /**
  * getUserAll
- * request: getUserGetUserAll
- * url: getUserGetUserAllURL
- * method: getUserGetUserAll_TYPE
- * raw_url: getUserGetUserAll_RAW_URL
+ * request: postUserGetUserAll
+ * url: postUserGetUserAllURL
+ * method: postUserGetUserAll_TYPE
+ * raw_url: postUserGetUserAll_RAW_URL
+ * @param map - map
+ * @param name - 模糊搜索-name
+ * @param page - 当前页
+ * @param pageSize - 一页多少个
+ * @param sort - 升降序
+ * @param sortKey - 升降序的键
+ * @param user - 模糊搜索-user
  */
-export const getUserGetUserAll = function(parameters = {}) {
+export const postUserGetUserAll = function(parameters = {}) {
   const domain = parameters.$domain ? parameters.$domain : getDomain()
   const config = parameters.$config
   let path = '/user/getUserAll'
   let body = {};
   let queryParameters = {};
   let formData = new FormData();
+  if (parameters.$body) {
+    body = parameters.$body;
+  } else {
+    body = parameters
+  }
+  if (parameters['page'] === undefined) {
+    return Promise.reject(new Error('Missing parameter : page'))
+  }
+  if (parameters['pageSize'] === undefined) {
+    return Promise.reject(new Error('Missing parameter : pageSize'))
+  }
+  if (parameters['sort'] === undefined) {
+    return Promise.reject(new Error('Missing parameter : sort'))
+  }
+  if (parameters['sortKey'] === undefined) {
+    return Promise.reject(new Error('Missing parameter : sortKey'))
+  }
   if (parameters.$queryParameters) {
     Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
       queryParameters[parameterName] = parameters.$queryParameters[parameterName]
     });
   }
-  return request('get', domain + path, body, queryParameters, formData, config)
+  return request('post', domain + path, body, queryParameters, formData, config)
 }
-export const getUserGetUserAll_RAW_URL = function() {
+export const postUserGetUserAll_RAW_URL = function() {
   return '/user/getUserAll'
 }
-export const getUserGetUserAll_TYPE = function() {
-  return 'get'
+export const postUserGetUserAll_TYPE = function() {
+  return 'post'
 }
-export const getUserGetUserAllURL = function(parameters = {}) {
+export const postUserGetUserAllURL = function(parameters = {}) {
   let queryParameters = {}
   const domain = parameters.$domain ? parameters.$domain : getDomain()
   let path = '/user/getUserAll'
@@ -883,11 +960,58 @@ export const getUserLoginOutURL = function(parameters = {}) {
   return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
 }
 /**
+ * resetUserPwd
+ * request: getUserResetUserPwd
+ * url: getUserResetUserPwdURL
+ * method: getUserResetUserPwd_TYPE
+ * raw_url: getUserResetUserPwd_RAW_URL
+ * @param userId - userId
+ */
+export const getUserResetUserPwd = function(parameters = {}) {
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  const config = parameters.$config
+  let path = '/user/resetUserPwd'
+  let body = {};
+  let queryParameters = {};
+  let formData = new FormData();
+  if (parameters['userId'] !== undefined) {
+    queryParameters['userId'] = parameters['userId']
+  }
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    });
+  }
+  return request('get', domain + path, body, queryParameters, formData, config)
+}
+export const getUserResetUserPwd_RAW_URL = function() {
+  return '/user/resetUserPwd'
+}
+export const getUserResetUserPwd_TYPE = function() {
+  return 'get'
+}
+export const getUserResetUserPwdURL = function(parameters = {}) {
+  let queryParameters = {}
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  let path = '/user/resetUserPwd'
+  if (parameters['userId'] !== undefined) {
+    queryParameters['userId'] = parameters['userId']
+  }
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    })
+  }
+  let keys = Object.keys(queryParameters)
+  return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
+}
+/**
  * saveUser
  * request: postUserSaveUser
  * url: postUserSaveUserURL
  * method: postUserSaveUser_TYPE
  * raw_url: postUserSaveUser_RAW_URL
+ * @param code - code
  * @param userEntity - userEntity
  */
 export const postUserSaveUser = function(parameters = {}) {
@@ -897,6 +1021,9 @@ export const postUserSaveUser = function(parameters = {}) {
   let body = {};
   let queryParameters = {};
   let formData = new FormData();
+  if (parameters['code'] !== undefined) {
+    queryParameters['code'] = parameters['code']
+  }
   if (parameters.$body) {
     body = parameters.$body;
   } else {
@@ -919,6 +1046,55 @@ export const postUserSaveUserURL = function(parameters = {}) {
   let queryParameters = {}
   const domain = parameters.$domain ? parameters.$domain : getDomain()
   let path = '/user/saveUser'
+  if (parameters['code'] !== undefined) {
+    queryParameters['code'] = parameters['code']
+  }
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    })
+  }
+  let keys = Object.keys(queryParameters)
+  return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
+}
+/**
+ * sendUserEmail
+ * request: getUserSendEmail
+ * url: getUserSendEmailURL
+ * method: getUserSendEmail_TYPE
+ * raw_url: getUserSendEmail_RAW_URL
+ * @param email - email
+ */
+export const getUserSendEmail = function(parameters = {}) {
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  const config = parameters.$config
+  let path = '/user/sendEmail'
+  let body = {};
+  let queryParameters = {};
+  let formData = new FormData();
+  if (parameters['email'] !== undefined) {
+    queryParameters['email'] = parameters['email']
+  }
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    });
+  }
+  return request('get', domain + path, body, queryParameters, formData, config)
+}
+export const getUserSendEmail_RAW_URL = function() {
+  return '/user/sendEmail'
+}
+export const getUserSendEmail_TYPE = function() {
+  return 'get'
+}
+export const getUserSendEmailURL = function(parameters = {}) {
+  let queryParameters = {}
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  let path = '/user/sendEmail'
+  if (parameters['email'] !== undefined) {
+    queryParameters['email'] = parameters['email']
+  }
   if (parameters.$queryParameters) {
     Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
       queryParameters[parameterName] = parameters.$queryParameters[parameterName]

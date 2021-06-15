@@ -1,6 +1,6 @@
 <template>
   <div class="center">
-    <search-user />
+    <search-user @onRefresh="refreshTable" @onSearch="refreshTable" />
     <el-row>
       <el-button type="primary" size="mini" @click="addUser">新键</el-button>
       <el-button type="danger" size="mini" @click="deleteUser">删除</el-button>
@@ -11,13 +11,24 @@
       <el-table-column prop="user" label="账号" width="180"> </el-table-column>
       <el-table-column prop="name" label="名称" width="180"> </el-table-column>
       <el-table-column prop="note" label="备注"> </el-table-column>
-      <el-table-column fixed="right" label="操作" width="200">
+      <el-table-column fixed="right" label="操作" width="250">
         <template slot-scope="scope">
           <el-button @click="showEditUser(scope.row)" type="primary" size="mini">查看</el-button>
+          <el-button type="info" size="mini" @click="resetPwd(scope.row)">重置密码</el-button>
           <el-button type="danger" size="mini" @click="deleteUser(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination
+      @size-change="selectSizeChange"
+      @current-change="selectCurrentChange"
+      :current-page.sync="searchParams.page"
+      :page-sizes="[2, 10, 20, 40]"
+      :page-size="searchParams.pageSize"
+      layout="sizes, prev, pager, next"
+      :total="tableDataSize"
+    >
+    </el-pagination>
     <edit-user ref="editUser" @Submit="submit" />
   </div>
 </template>
@@ -32,6 +43,15 @@ export default {
   data() {
     return {
       tableData: [],
+      tableDataSize: 0,
+      searchParams: {
+        page: 1,
+        pageSize: 2,
+        sort: 'DESC',
+        sortKey: 'id',
+        user: '',
+        name: ''
+      },
       selectTableData: [], //选中后的
       loading: false
     }
@@ -41,6 +61,13 @@ export default {
     this.refreshTable()
   },
   methods: {
+    selectSizeChange(val) {
+      this.searchParams.pageSize = val
+      this.refreshTable()
+    },
+    selectCurrentChange(val) {
+      this.refreshTable()
+    },
     //选中行
     selectTable(val) {
       this.selectTableData = val
@@ -64,13 +91,17 @@ export default {
     addUser() {
       this.$refs.editUser.showEdit()
     },
-    refreshTable() {
+    refreshTable(params) {
+      if (!params) params = this.searchParams
       this.tableData = []
       this.selectTableData = []
+      this.loading = true
       userApi
-        .GetUserGetUserAll()
+        .PostUserGetUserAll(params)
         .then((res) => {
-          this.tableData = res.data.data
+          const { data } = res
+          this.tableData = data.data.list
+          this.tableDataSize = data.data.size
           this.loading = false
         })
         .catch((e) => {
@@ -78,17 +109,32 @@ export default {
           this.loading = false
         })
     },
-    submit(form) {
+    submit({ form, rolesAll }) {
       const loading = $Loading()
       userApi
         .PostUserSaveUser(form)
         .then((res) => {
           const { data } = res
-          if (data === 200) {
-            this.$message.error(data.msg)
+          if (data && data.code === 200) {
+            //如果是修改-成功后,再次调用接口添加权限
+            if (form.id && rolesAll) {
+              return userApi.PostRolesSaveRolesByUserId({ userId: form.id, rolesAll })
+            } else {
+              this.$refs.editUser.closeDialog()
+              this.$message.success(data.msg)
+            }
           }
           loading.close()
-          this.$refs.editUser.closeDialog()
+          this.refreshTable()
+          return false
+        })
+        .then((res2) => {
+          const { data } = res2
+          if (data && data.code === 200) {
+            this.$refs.editUser.closeDialog()
+            this.$message.success(data.msg)
+          }
+          loading.close()
           this.refreshTable()
         })
         .catch((e) => {
@@ -96,6 +142,28 @@ export default {
           loading.close()
           this.$refs.editUser.closeDialog()
         })
+    },
+    //重置密码
+    resetPwd(row) {
+      this.$confirm('确认重置用户密码, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          userApi
+            .GetUserResetUserPwd({ userId: row.id })
+            .then((res) => {
+              const { data } = res
+              this.refreshTable()
+              if (data.code === 200) this.$message.success(data.msg)
+            })
+            .catch((e) => {
+              console.log(e)
+              this.$message.error(String(e))
+            })
+        })
+        .catch(() => {})
     },
     deleteUser(row) {
       //批量删除-单个删除
@@ -137,5 +205,7 @@ export default {
 <style scoped lang="scss">
 .el-table {
   margin-top: 20px;
+  margin-bottom: 20px;
+  height: calc(100vh - 360px);
 }
 </style>

@@ -6,17 +6,17 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "tb_user")
+@Table(name = "tb_user", uniqueConstraints=@UniqueConstraint(columnNames={"id", "user"}))
 @Data
 //用户
 public class UserEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    int id = 0;
     @Column(nullable = false)
-    String user;
+    String user = "";
     @Column(nullable = false)
-    String name;
+    String name = "";
     @Column(nullable = false)
     String pwd;
     @Column(nullable = true)
@@ -27,4 +27,10 @@ public class UserEntity implements Serializable {
     boolean isDel;
     @Column(nullable = false)
     String note;
+    //覆盖-返回的时候有id
+
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public int getId() {
+        return id;
+    }
 }
