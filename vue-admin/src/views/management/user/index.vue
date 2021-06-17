@@ -25,7 +25,7 @@
       :current-page.sync="searchParams.page"
       :page-sizes="[2, 10, 20, 40]"
       :page-size="searchParams.pageSize"
-      layout="sizes, prev, pager, next"
+      layout="total,sizes, prev, pager, next"
       :total="tableDataSize"
     >
     </el-pagination>
@@ -93,6 +93,7 @@ export default {
     },
     refreshTable(params) {
       if (!params) params = this.searchParams
+      this.searchParams = { ...params }
       this.tableData = []
       this.selectTableData = []
       this.loading = true

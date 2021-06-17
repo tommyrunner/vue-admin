@@ -15,7 +15,7 @@ import java.io.Serializable;
 public class RolesEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    int id = 0;
     @Column(nullable = false)
     String roles;
     @Column(nullable = false)

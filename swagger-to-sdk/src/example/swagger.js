@@ -50,6 +50,116 @@ export const request = (method, url, body, queryParameters, formData, config) =>
  ==========================================================*/
 const isArray = (val) => !!val && Array.isArray(val)
 /**
+ * deleteRoles
+ * request: postRolesDeleteRoles
+ * url: postRolesDeleteRolesURL
+ * method: postRolesDeleteRoles_TYPE
+ * raw_url: postRolesDeleteRoles_RAW_URL
+ * @param map - map
+ * @param rolesIds - 菜单唯一id
+ */
+export const postRolesDeleteRoles = function(parameters = {}) {
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  const config = parameters.$config
+  let path = '/roles/deleteRoles'
+  let body = {};
+  let queryParameters = {};
+  let formData = new FormData();
+  if (parameters.$body) {
+    body = parameters.$body;
+  } else {
+    body = parameters
+  }
+  if (parameters['rolesIds'] === undefined) {
+    return Promise.reject(new Error('Missing parameter : rolesIds'))
+  }
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    });
+  }
+  return request('post', domain + path, body, queryParameters, formData, config)
+}
+export const postRolesDeleteRoles_RAW_URL = function() {
+  return '/roles/deleteRoles'
+}
+export const postRolesDeleteRoles_TYPE = function() {
+  return 'post'
+}
+export const postRolesDeleteRolesURL = function(parameters = {}) {
+  let queryParameters = {}
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  let path = '/roles/deleteRoles'
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    })
+  }
+  let keys = Object.keys(queryParameters)
+  return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
+}
+/**
+ * getRolesAll
+ * request: postRolesGetRolesAll
+ * url: postRolesGetRolesAllURL
+ * method: postRolesGetRolesAll_TYPE
+ * raw_url: postRolesGetRolesAll_RAW_URL
+ * @param map - map
+ * @param page - 当前页
+ * @param pageSize - 一页多少个
+ * @param sort - 升降序
+ * @param sortKey - 升降序的键
+ */
+export const postRolesGetRolesAll = function(parameters = {}) {
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  const config = parameters.$config
+  let path = '/roles/getRolesAll'
+  let body = {};
+  let queryParameters = {};
+  let formData = new FormData();
+  if (parameters.$body) {
+    body = parameters.$body;
+  } else {
+    body = parameters
+  }
+  if (parameters['page'] === undefined) {
+    return Promise.reject(new Error('Missing parameter : page'))
+  }
+  if (parameters['pageSize'] === undefined) {
+    return Promise.reject(new Error('Missing parameter : pageSize'))
+  }
+  if (parameters['sort'] === undefined) {
+    return Promise.reject(new Error('Missing parameter : sort'))
+  }
+  if (parameters['sortKey'] === undefined) {
+    return Promise.reject(new Error('Missing parameter : sortKey'))
+  }
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    });
+  }
+  return request('post', domain + path, body, queryParameters, formData, config)
+}
+export const postRolesGetRolesAll_RAW_URL = function() {
+  return '/roles/getRolesAll'
+}
+export const postRolesGetRolesAll_TYPE = function() {
+  return 'post'
+}
+export const postRolesGetRolesAllURL = function(parameters = {}) {
+  let queryParameters = {}
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  let path = '/roles/getRolesAll'
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    })
+  }
+  let keys = Object.keys(queryParameters)
+  return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
+}
+/**
  * getRolesByUserIdAll
  * request: getRolesGetRolesByUserIdAll
  * url: getRolesGetRolesByUserIdAllURL
@@ -87,6 +197,51 @@ export const getRolesGetRolesByUserIdAllURL = function(parameters = {}) {
   if (parameters['userId'] !== undefined) {
     queryParameters['userId'] = parameters['userId']
   }
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    })
+  }
+  let keys = Object.keys(queryParameters)
+  return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
+}
+/**
+ * saveRoles
+ * request: postRolesSaveRoles
+ * url: postRolesSaveRolesURL
+ * method: postRolesSaveRoles_TYPE
+ * raw_url: postRolesSaveRoles_RAW_URL
+ * @param rolesEntity - rolesEntity
+ */
+export const postRolesSaveRoles = function(parameters = {}) {
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  const config = parameters.$config
+  let path = '/roles/saveRoles'
+  let body = {};
+  let queryParameters = {};
+  let formData = new FormData();
+  if (parameters.$body) {
+    body = parameters.$body;
+  } else {
+    body = parameters
+  }
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    });
+  }
+  return request('post', domain + path, body, queryParameters, formData, config)
+}
+export const postRolesSaveRoles_RAW_URL = function() {
+  return '/roles/saveRoles'
+}
+export const postRolesSaveRoles_TYPE = function() {
+  return 'post'
+}
+export const postRolesSaveRolesURL = function(parameters = {}) {
+  let queryParameters = {}
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  let path = '/roles/saveRoles'
   if (parameters.$queryParameters) {
     Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
       queryParameters[parameterName] = parameters.$queryParameters[parameterName]
@@ -140,6 +295,51 @@ export const postRolesSaveRolesByUserIdURL = function(parameters = {}) {
   let queryParameters = {}
   const domain = parameters.$domain ? parameters.$domain : getDomain()
   let path = '/roles/saveRolesByUserId'
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    })
+  }
+  let keys = Object.keys(queryParameters)
+  return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
+}
+/**
+ * syncRoles
+ * request: postRolesSyncRoles
+ * url: postRolesSyncRolesURL
+ * method: postRolesSyncRoles_TYPE
+ * raw_url: postRolesSyncRoles_RAW_URL
+ * @param rolesEntities - rolesEntities
+ */
+export const postRolesSyncRoles = function(parameters = {}) {
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  const config = parameters.$config
+  let path = '/roles/syncRoles'
+  let body = {};
+  let queryParameters = {};
+  let formData = new FormData();
+  if (parameters.$body) {
+    body = parameters.$body;
+  } else {
+    body = parameters
+  }
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    });
+  }
+  return request('post', domain + path, body, queryParameters, formData, config)
+}
+export const postRolesSyncRoles_RAW_URL = function() {
+  return '/roles/syncRoles'
+}
+export const postRolesSyncRoles_TYPE = function() {
+  return 'post'
+}
+export const postRolesSyncRolesURL = function(parameters = {}) {
+  let queryParameters = {}
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  let path = '/roles/syncRoles'
   if (parameters.$queryParameters) {
     Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
       queryParameters[parameterName] = parameters.$queryParameters[parameterName]

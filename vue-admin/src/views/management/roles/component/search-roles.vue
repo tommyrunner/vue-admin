@@ -4,12 +4,21 @@
       <template v-slot:title>
         <el-row :gutter="10" class="search-row">
           <el-col :span="3">
-            <el-input v-model.trim="form.user" size="mini" placeholder="账号"></el-input>
+            <el-input v-model.trim="form.title" size="mini" placeholder="标题"></el-input>
           </el-col>
           <el-col :span="3">
-            <el-input v-model.trim="form.name" size="mini" placeholder="名称"></el-input>
+            <el-input v-model.trim="form.roles" size="mini" placeholder="菜单"></el-input>
           </el-col>
-          <el-col :span="3" :offset="15">
+          <el-col :span="3">
+            <el-input v-model.trim="form.path" size="mini" placeholder="地址"></el-input>
+          </el-col>
+          <el-col :span="3">
+            <el-input v-model.trim="form.icon" size="mini" placeholder="图标"></el-input>
+          </el-col>
+          <el-col :span="3">
+            <el-input v-model.trim="form.note" size="mini" placeholder="备注"></el-input>
+          </el-col>
+          <el-col :span="3" :offset="6">
             <div class="btn">
               <el-button icon="el-icon-search" circle @click="search"></el-button>
               <el-button type="warning" icon="el-icon-refresh" circle @click="refresh"></el-button>
@@ -23,7 +32,7 @@
 </template>
 <script>
 export default {
-  name: 'SearchUser',
+  name: 'SearchRoles',
   data() {
     return {
       form: this.initForm(),
@@ -39,8 +48,9 @@ export default {
       })
     },
     refresh() {
-      this.form = this.initForm()
+      //初始化
       this.searchParams = this.initSearch()
+      this.form = this.initForm()
       this.$emit('onRefresh', this.searchParams)
     },
     search() {
@@ -49,8 +59,11 @@ export default {
     },
     initForm() {
       return {
-        user: '',
-        name: ''
+        title: '',
+        roles: '',
+        path: '',
+        icon: '',
+        note: ''
       }
     },
     initSearch() {
