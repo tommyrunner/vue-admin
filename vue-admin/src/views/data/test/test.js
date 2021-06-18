@@ -1,4 +1,4 @@
-import { getAxiosInstance, setDomain, postTestDeleteTest, postTestGetTestAll, postTestSaveTest, postTestSyncTest } from 'tommy-vueadmin-sdk'
+import { getAxiosInstance, setDomain, postTestDeleteTest, postTestGetTestAll, postTestSaveTest } from 'tommy-vueadmin-sdk'
 //修改请求头
 import { setApi } from '@/api/index'
 //getAxiosInstance:获取path,setDomain:设置请求头的方法
@@ -23,6 +23,5 @@ const PostTestSyncTest = (params) => {
 export default {
   PostTestGetTestAll,
   PostTestDeleteTest,
-  PostTestSaveTest,
-  PostTestSyncTest
+  PostTestSaveTest
 }

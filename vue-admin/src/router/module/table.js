@@ -12,6 +12,12 @@ const tableRoute = {
       name: 'DataTable',
       // component: () => import('@/views/data/table/index'),
       meta: { title: 'DataTable', icon: 'table' }
+    },
+    {
+      path: 'test',
+      name: 'DataTest',
+      component: () => import('@/views/data/test/index'),
+      meta: { title: 'DataTest', icon: 'test' }
     }
   ]
 }
