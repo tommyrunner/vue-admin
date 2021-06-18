@@ -1,0 +1,74 @@
+<template>
+  <wb-dialog ref="dialog" @cancel="cancel" @sublimt="sublimt" v-loading="loading">
+    <el-form ref="form" :rules="rules" :model="form" label-width="80px">
+       {{#each edit}}
+      <el-form-item label="{{this.label}}" prop="{{this.key}}">
+        <el-input v-model="form.{{this.key}}" placeholder="{{this.label}}"></el-input>
+      </el-form-item>
+        {{/each}}
+    </el-form>
+  </wb-dialog>
+</template>
+<script>
+import { $Loading } from '@/utils'
+
+export default {
+  name: 'Edit{{Api}}',
+  data() {
+    return {
+      form: this.initForm(),
+      loading: true,
+      isEdit: false,
+      rules: {
+        {{#each edit}}
+        {{this.key}}: [{ required: true, message: '请输入{{this.label}}', trigger: 'blur' }],
+        {{/each}}
+      }
+    }
+  },
+  methods: {
+    // 显示
+    showEdit(item) {
+      this.isEdit = !item
+      if (item) {
+        this.$refs.dialog.showDialog('编辑菜单')
+        //回显数据
+        this.form = Object.assign({}, item)
+      } else {
+        this.$refs.dialog.showDialog('添加菜单')
+        //清空
+        this.form = this.initForm()
+      }
+    },
+    // 初始化
+    initForm() {
+      return {
+      {{#each edit}}
+        {{this.key}}: '',
+      {{/each}}
+      }
+    },
+    closeDialog() {
+      this.$refs.dialog.closeDialog()
+    },
+    //取消关闭
+    cancel() {
+      this.from = this.initForm()
+      //重置错误警告
+      this.$refs.form.resetFields()
+    },
+    //提交
+    sublimt() {
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          this.$emit('Submit', { form: this.form })
+        } else {
+          return false
+        }
+      })
+    }
+  }
+}
+</script>
+<style scoped lang="scss">
+</style>

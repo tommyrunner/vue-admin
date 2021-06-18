@@ -59,7 +59,7 @@ public class RolesController {
             @ApiImplicitParam(value = "菜单唯一id", name = "rolesIds", required = true),
     })
     public Map<String, Object> deleteRoles(HttpServletRequest request, @RequestBody(required = false) Map<String, List<Integer>> map) {
-        log.debug("-------------------getUserAll:获取全部用户-------------");
+        log.debug("-------------------getUserAll:获取全部菜单-------------");
         List<Integer> rolesIds = map.get("rolesIds");
         String bearerToken = request.getHeader("Authorization");
         return rolesService.deleteRolesService(bearerToken, rolesIds);
@@ -67,7 +67,7 @@ public class RolesController {
     @PostMapping("/saveRoles")
     public Map<String, Object> saveRoles(HttpServletRequest request,
                                         @RequestBody(required = false) RolesEntity rolesEntity) {
-        log.debug("-------------------PostMapping:添加用户-------------");
+        log.debug("-------------------PostMapping:添加菜单-------------");
         String bearerToken = request.getHeader("Authorization");
         return rolesService.saveRolesService(bearerToken,rolesEntity);
     }
@@ -75,7 +75,7 @@ public class RolesController {
     @PostMapping("/syncRoles")
     public Map<String, Object> syncRoles(HttpServletRequest request,
                                          @RequestBody(required = false) List<RolesEntity> rolesEntities) {
-        log.debug("-------------------PostMapping:添加用户-------------");
+        log.debug("-------------------PostMapping:添加菜单-------------");
         String bearerToken = request.getHeader("Authorization");
         return rolesService.syncRolesService(bearerToken,rolesEntities);
     }

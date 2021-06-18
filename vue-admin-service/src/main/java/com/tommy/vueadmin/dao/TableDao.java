@@ -8,4 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * 2021/6/9
  */
 public interface TableDao extends JpaRepository<TableEntity,Integer> {
+
 }

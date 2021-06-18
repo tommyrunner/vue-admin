@@ -1,0 +1,39 @@
+@Service
+public class {{Module}}Service {
+
+    @Autowired
+    {{Module}}Dao {{module}}Dao;
+
+    //查询+模糊
+    public Map<String, Object> get{{Module}}AllService( Map<String,Object> map) {
+        //获取相应参数
+        Integer page = (Integer) map.getOrDefault("page",1);
+        Integer pageSize = (Integer) map.getOrDefault("pageSize",10);
+        String sort = (String) map.getOrDefault("sort","DESC");
+        String sortKey = (String) map.getOrDefault("sortKey","id");
+        {{#each entity}}
+        {{this.type}} {{this.key}} = ({{this.type}}) map.getOrDefault("{{this.key}}","");
+        {{/each}}
+        Sort sortObj = Sort.by(MyUtils.getSort(sort), sortKey);
+        Pageable pageable = PageRequest.of(page-1, pageSize,sortObj);
+        List<{{Module}}Entity> allContains = {{module}}Dao.findAllBy{{#each entity}}{{this.Key}}ContainingAnd{{/each}}  ({{#each entity}} {{this.key}},{{/each}}pageable);
+        Map<String,Object> returnMap = new HashMap<>();
+        returnMap.put("size",{{module}}Dao.countAllBy{{#each entity}}{{this.Key}}ContainingAnd{{/each}}  ({{#each entity}} {{this.key}},{{/each}}));
+        returnMap.put("list",allContains);
+        return ReturnDateUtil.returnData(ReturnDateUtil.CODE_OK, "获取成功!", returnMap);
+    }
+    //批量删除
+    @Transactional
+    public Map<String, Object> delete{{Module}}Service( List<Integer> {{module}}Ids) {
+         {{module}}Dao.delete{{Module}}EntitiesByIdIn({{module}}Ids);
+        return ReturnDateUtil.returnData(ReturnDateUtil.CODE_OK, "删除成功!", {{module}}Ids.size());
+    }
+   //保存-修改
+    public Map<String, Object> save{{Module}}Service( {{Module}}Entity {{module}}Entity) {
+        //判断是否添加还是修改
+        boolean isAdd = {{module}}Entity.getId() == 0;
+        //如果是添加
+        {{Module}}Entity save = {{module}}Dao.save({{module}}Entity);
+        return ReturnDateUtil.returnData(ReturnDateUtil.CODE_OK, isAdd ? "添加成功!" : "修改成功!", save);
+    }
+}

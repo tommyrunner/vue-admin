@@ -1,0 +1,8 @@
+{
+  "entity": [
+    { "label": "值", "key": "value", "Key": "Value", "type": "String", "nullable": "false" },
+    { "label": "备注", "key": "note", "Key": "Note", "type": "String", "nullable": "false" }
+  ],
+  "Module": "Test",
+  "module": "test"
+}

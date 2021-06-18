@@ -478,6 +478,161 @@ export const postTableSaveTableURL = function(parameters = {}) {
   return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
 }
 /**
+ * deleteTest
+ * request: postTestDeleteTest
+ * url: postTestDeleteTestURL
+ * method: postTestDeleteTest_TYPE
+ * raw_url: postTestDeleteTest_RAW_URL
+ * @param map - map
+ * @param testIds - 唯一id
+ */
+export const postTestDeleteTest = function(parameters = {}) {
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  const config = parameters.$config
+  let path = '/test/deleteTest'
+  let body = {};
+  let queryParameters = {};
+  let formData = new FormData();
+  if (parameters.$body) {
+    body = parameters.$body;
+  } else {
+    body = parameters
+  }
+  if (parameters['testIds'] === undefined) {
+    return Promise.reject(new Error('Missing parameter : testIds'))
+  }
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    });
+  }
+  return request('post', domain + path, body, queryParameters, formData, config)
+}
+export const postTestDeleteTest_RAW_URL = function() {
+  return '/test/deleteTest'
+}
+export const postTestDeleteTest_TYPE = function() {
+  return 'post'
+}
+export const postTestDeleteTestURL = function(parameters = {}) {
+  let queryParameters = {}
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  let path = '/test/deleteTest'
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    })
+  }
+  let keys = Object.keys(queryParameters)
+  return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
+}
+/**
+ * getTestAll
+ * request: postTestGetTestAll
+ * url: postTestGetTestAllURL
+ * method: postTestGetTestAll_TYPE
+ * raw_url: postTestGetTestAll_RAW_URL
+ * @param map - map
+ * @param page - 当前页
+ * @param pageSize - 一页多少个
+ * @param sort - 升降序
+ * @param sortKey - 升降序的键
+ */
+export const postTestGetTestAll = function(parameters = {}) {
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  const config = parameters.$config
+  let path = '/test/getTestAll'
+  let body = {};
+  let queryParameters = {};
+  let formData = new FormData();
+  if (parameters.$body) {
+    body = parameters.$body;
+  } else {
+    body = parameters
+  }
+  if (parameters['page'] === undefined) {
+    return Promise.reject(new Error('Missing parameter : page'))
+  }
+  if (parameters['pageSize'] === undefined) {
+    return Promise.reject(new Error('Missing parameter : pageSize'))
+  }
+  if (parameters['sort'] === undefined) {
+    return Promise.reject(new Error('Missing parameter : sort'))
+  }
+  if (parameters['sortKey'] === undefined) {
+    return Promise.reject(new Error('Missing parameter : sortKey'))
+  }
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    });
+  }
+  return request('post', domain + path, body, queryParameters, formData, config)
+}
+export const postTestGetTestAll_RAW_URL = function() {
+  return '/test/getTestAll'
+}
+export const postTestGetTestAll_TYPE = function() {
+  return 'post'
+}
+export const postTestGetTestAllURL = function(parameters = {}) {
+  let queryParameters = {}
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  let path = '/test/getTestAll'
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    })
+  }
+  let keys = Object.keys(queryParameters)
+  return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
+}
+/**
+ * saveTest
+ * request: postTestSaveTest
+ * url: postTestSaveTestURL
+ * method: postTestSaveTest_TYPE
+ * raw_url: postTestSaveTest_RAW_URL
+ * @param testEntity - testEntity
+ */
+export const postTestSaveTest = function(parameters = {}) {
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  const config = parameters.$config
+  let path = '/test/saveTest'
+  let body = {};
+  let queryParameters = {};
+  let formData = new FormData();
+  if (parameters.$body) {
+    body = parameters.$body;
+  } else {
+    body = parameters
+  }
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    });
+  }
+  return request('post', domain + path, body, queryParameters, formData, config)
+}
+export const postTestSaveTest_RAW_URL = function() {
+  return '/test/saveTest'
+}
+export const postTestSaveTest_TYPE = function() {
+  return 'post'
+}
+export const postTestSaveTestURL = function(parameters = {}) {
+  let queryParameters = {}
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  let path = '/test/saveTest'
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    })
+  }
+  let keys = Object.keys(queryParameters)
+  return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
+}
+/**
  * toError-返回错误
  * request: getToError
  * url: getToErrorURL

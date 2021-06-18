@@ -1,0 +1,13 @@
+@Entity
+@Table(name = "tb_{{module}}")
+@Data
+//数据
+public class {{Module}}Entity implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    int id = 0;
+    {{#each entity}}
+    @Column{{#if this.nullable }} (nullable = false) {{/if}}
+    {{this.type}} {{this.key}} {{#if this.nullable }} = ""{{/if}};
+    {{/each}}
+}

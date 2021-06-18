@@ -10,7 +10,7 @@ const tableRoute = {
     {
       path: 'table',
       name: 'DataTable',
-      component: () => import('@/views/data/table/index'),
+      // component: () => import('@/views/data/table/index'),
       meta: { title: 'DataTable', icon: 'table' }
     }
   ]

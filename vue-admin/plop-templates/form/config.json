@@ -1,0 +1,12 @@
+{
+  "form": [
+    { "label": "值", "key": "value" },
+    { "label": "备注", "key": "note" }
+  ],
+  "edit": [
+    { "label": "值", "key": "value" },
+    { "label": "备注", "key": "note" }
+  ],
+  "Api": "Test",
+  "api": "test"
+}

@@ -1,0 +1,37 @@
+
+@RestController
+@RequestMapping("/{{module}}")
+@Slf4j
+public class {{Module}}Controller {
+
+    @Autowired
+    {{Module}}Service {{module}}Service;
+
+    //----
+    @PostMapping("/get{{Module}}All")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "当前页", name = "page", required = true),
+            @ApiImplicitParam(value = "一页多少个", name = "pageSize", required = true),
+            @ApiImplicitParam(value = "升降序", name = "sort", required = true),
+            @ApiImplicitParam(value = "升降序的键", name = "sortKey", required = true),
+    })
+    public Map<String, Object> get{{Module}}All(@RequestBody(required = false) Map<String,Object> map) {
+        log.debug("-------------------getUserAll:获取全部{{Module}}-------------");
+        return {{module}}Service.get{{Module}}AllService(map);
+    }
+    @PostMapping("/delete{{Module}}")
+    //必传参数,提示客户端
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "唯一id", name = "{{module}}Ids", required = true),
+    })
+    public Map<String, Object> delete{{Module}}(@RequestBody(required = false) Map<String, List<Integer>> map) {
+        log.debug("-------------------getUserAll:获取全部{{Module}}-------------");
+        List<Integer> {{module}}Ids = map.get("{{module}}Ids");
+        return {{module}}Service.delete{{Module}}Service( {{module}}Ids);
+    }
+    @PostMapping("/save{{Module}}")
+    public Map<String, Object> save{{Module}}(@RequestBody(required = false) {{Module}}Entity {{module}}Entity) {
+        log.debug("-------------------PostMapping:添加{{Module}}-------------");
+        return {{module}}Service.save{{Module}}Service({{module}}Entity);
+    }
+}

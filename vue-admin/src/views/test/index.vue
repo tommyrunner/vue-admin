@@ -1,23 +1,19 @@
 <template>
   <div class="center">
-    <search-roles @onRefresh="refreshTable" @onSearch="refreshTable" />
+    <search-test @onRefresh="refreshTable" @onSearch="refreshTable" />
     <el-row>
-      <el-button type="primary" size="mini" @click="addRoles">新键</el-button>
-      <el-button type="warning" size="mini" @click="syncRoles" title="将客户端路由列表同步到服务器中">同步</el-button>
-      <el-button type="danger" size="mini" @click="deleteRoles">删除</el-button>
+      <el-button type="primary" size="mini" @click="addTest">新键</el-button>
+      <el-button type="danger" size="mini" @click="deleteTest">删除</el-button>
     </el-row>
     <el-table @selection-change="selectTable" border v-loading="loading" :data="tableData" stripe style="width: 100%">
       <el-table-column type="index" width="50" label="序号" />
       <el-table-column type="selection" width="55" />
-      <el-table-column prop="title" label="标题" width="180"> </el-table-column>
-      <el-table-column prop="roles" label="菜单" width="180"> </el-table-column>
-      <el-table-column prop="path" label="地址" width="180"> </el-table-column>
-      <el-table-column prop="icon" label="图标" width="180"> </el-table-column>
+      <el-table-column prop="value" label="值" width="180"> </el-table-column>
       <el-table-column prop="note" label="备注"> </el-table-column>
       <el-table-column fixed="right" label="操作" width="250">
         <template slot-scope="scope">
-          <el-button @click="showEditRoles(scope.row)" type="primary" size="mini">查看</el-button>
-          <el-button type="danger" size="mini" @click="deleteRoles(scope.row)">删除</el-button>
+          <el-button @click="showEdit(scope.row)" type="primary" size="mini">查看</el-button>
+          <el-button type="danger" size="mini" @click="deleteTest(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -31,18 +27,17 @@
       :total="tableDataSize"
     >
     </el-pagination>
-    <edit-roles ref="editRoles" @Submit="submit" />
+    <edit-test ref="editTest" @Submit="submit" />
   </div>
 </template>
 <script>
-import rolesApi from '@/api/roles'
-import EditRoles from './component/edit-roles.vue'
-import SearchRoles from './component/search-roles.vue'
-import { rolesRoutes } from '@/router'
+import testApi from './test'
+import EditTest from './component/edit-test.vue'
+import SearchTest from './component/search-test.vue'
 import { $Loading } from '@/utils'
 
 export default {
-  components: { EditRoles, SearchRoles },
+  components: { EditTest, SearchTest },
   data() {
     return {
       tableData: [],
@@ -74,45 +69,13 @@ export default {
     selectTable(val) {
       this.selectTableData = val
     },
-    showEditRoles(item) {
+    showEdit(item) {
       //获取权限
       //   const loading = $Loading()
-      this.$refs.editRoles.showEdit(item)
+      this.$refs.editTest.showEdit(item)
     },
-    addRoles() {
-      this.$refs.editRoles.showEdit()
-    },
-    //同步路由
-    syncRoles() {
-      this.syncData = []
-      const loading = $Loading()
-      this.toBaisRoles(rolesRoutes, this.syncData)
-      rolesApi
-        .PostRolesSyncRoles(this.syncData)
-        .then((res) => {
-          const { data } = res
-          if (data.code === 200) {
-            this.$message.success(data.msg)
-          } else this.$message.error(data.msg)
-          loading.close()
-          this.refreshTable()
-        })
-        .catch((e) => {
-          this.$message.error(String(e))
-          loading.close()
-          this.refreshTable()
-        })
-    },
-    //递归路由为平层
-    toBaisRoles(roles) {
-      roles.forEach((item) => {
-        if (!item.children && item.meta) {
-          this.syncData.push({ title: item.meta.title, roles: item.name, path: item.path, icon: item.meta.icon, note: '同步添加' })
-        }
-        if (item.children && item.children.length > 0) {
-          this.toBaisRoles(item.children)
-        }
-      })
+    addTest() {
+      this.$refs.editTest.showEdit()
     },
     refreshTable(params) {
       if (!params) params = this.searchParams
@@ -120,8 +83,8 @@ export default {
       this.tableData = []
       this.selectTableData = []
       this.loading = true
-      rolesApi
-        .PostRolesGetRolesAll(params)
+      testApi
+        .PostTestGetTestAll(params)
         .then((res) => {
           const { data } = res
           this.tableData = data.data.list
@@ -133,14 +96,14 @@ export default {
           this.loading = false
         })
     },
-    submit({ form, rolesAll }) {
+    submit({ form, testAll }) {
       const loading = $Loading()
-      rolesApi
-        .PostRolesSaveRoles(form)
+      testApi
+        .PostTestSaveTest(form)
         .then((res) => {
           const { data } = res
           if (data.code === 200) {
-            this.$refs.editRoles.closeDialog()
+            this.$refs.editTest.closeDialog()
             this.$message.success(data.msg)
           } else this.$message.error(data.msg)
           loading.close()
@@ -149,22 +112,22 @@ export default {
         .catch((e) => {
           this.$message.error(String(e))
           loading.close()
-          this.$refs.editRoles.closeDialog()
+          this.$refs.editTest.closeDialog()
         })
     },
-    deleteRoles(row) {
+    deleteTest(row) {
       //批量删除-单个删除
       let params = {}
       if (!row.id) {
         //多个删除
         if (this.selectTableData.length > 0) {
-          params.rolesIds = this.selectTableData.map((item) => item.id)
+          params.testIds = this.selectTableData.map((item) => item.id)
         } else {
           this.$message.warning('未选择行!')
         }
       } else {
         //单个删除
-        params.rolesIds = [row.id]
+        params.testIds = [row.id]
       }
       this.$confirm('确认删除用户, 是否继续?', '提示', {
         confirmButtonText: '确定',
@@ -172,8 +135,8 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          rolesApi
-            .PostRolesDeleteRoles({ ...params })
+          testApi
+            .PostTestDeleteTest({ ...params })
             .then((res) => {
               const { data } = res
               this.refreshTable()

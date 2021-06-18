@@ -74,7 +74,7 @@ public class RolesService {
         String icon = (String) map.getOrDefault("icon","");
         String path = (String) map.getOrDefault("path","");
         String note = (String) map.getOrDefault("note","");
-        Sort sortObj = Sort.by(MyUtils.getSort(sort), sortKey);//根据名字和年龄倒叙
+        Sort sortObj = Sort.by(MyUtils.getSort(sort), sortKey);
         Pageable pageable = PageRequest.of(page-1, pageSize,sortObj);
         List<RolesEntity> allContains = rolesDao.findAllByRolesContainingAndTitleContainingAndIconContainingAndPathContainingAndNoteContaining(roles, title, icon, path,note, pageable);
         Map<String,Object> returnMap = new HashMap<>();
