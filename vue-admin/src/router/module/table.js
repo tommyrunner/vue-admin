@@ -16,6 +16,7 @@ const tableRoute = {
     {
       path: 'test',
       name: 'DataTest',
+      hidden: true,
       component: () => import('@/views/data/test/index'),
       meta: { title: 'DataTest', icon: 'test' }
     }

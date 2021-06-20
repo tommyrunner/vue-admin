@@ -48,7 +48,6 @@ export default {
       return this.$store.state.tagsView.visitedViews
     },
     routes() {
-      console.log('app', this.$store.state.app.routes)
       return this.$store.state.app.routes
     }
   },

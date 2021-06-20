@@ -72,7 +72,7 @@ const actions = {
   },
 
   // user logout
-  logout({ commit, state }) {
+  logout({ commit, dispatch, state }) {
     return new Promise((resolve, reject) => {
       userApi
         .GetUserLoginOut({ token: state.token })
