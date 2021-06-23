@@ -2,18 +2,18 @@
   <div class="center">
     <search-test @onRefresh="refreshTable" @onSearch="refreshTable" />
     <el-row>
-      <el-button type="primary" size="mini" @click="addTest">新键</el-button>
-      <el-button type="danger" size="mini" @click="deleteTest">删除</el-button>
+      <el-button type="primary" size="mini" @click="addTest">{{ $t('form.new') }}</el-button>
+      <el-button type="danger" size="mini" @click="deleteTest">{{ $t('form.delete') }}</el-button>
     </el-row>
-    <el-table @selection-change="selectTable" border v-loading="loading" :data="tableData" stripe style="width: 100%">
-      <el-table-column type="index" width="50" label="序号" />
+    <el-table @selection-change="selectTable" border v-loading="loading" :data="tableData" stripe style="width: 100%" empty-text="fsd">
+      <el-table-column type="index" width="50" :label="$t('form.number')" />
       <el-table-column type="selection" width="55" />
       <el-table-column prop="value" label="值" width="180"> </el-table-column>
-      <el-table-column prop="note" label="备注"> </el-table-column>
-      <el-table-column fixed="right" label="操作" width="250">
+      <el-table-column prop="note" label="备注" width="180"> </el-table-column>
+      <el-table-column fixed="right" :label="$t('form.operation')" width="250">
         <template slot-scope="scope">
-          <el-button @click="showEdit(scope.row)" type="primary" size="mini">查看</el-button>
-          <el-button type="danger" size="mini" @click="deleteTest(scope.row)">删除</el-button>
+          <el-button @click="showEdit(scope.row)" type="primary" size="mini">{{ $t('form.edit') }}</el-button>
+          <el-button type="danger" size="mini" @click="deleteTest(scope.row)">{{ $t('form.delete') }}</el-button>
         </template>
       </el-table-column>
     </el-table>

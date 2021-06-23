@@ -65,10 +65,17 @@ export const postRolesDeleteRoles = function(parameters = {}) {
   let body = {};
   let queryParameters = {};
   let formData = new FormData();
+  if (parameters.$config) {
+    delete parameters.$config;
+  }
+  if (parameters.$domain) {
+    delete parameters.$domain;
+  }
   if (parameters.$body) {
-    body = parameters.$body;
-  } else {
-    body = parameters
+    delete parameters.$body;
+  }
+  body = {
+    ...parameters
   }
   if (parameters['rolesIds'] === undefined) {
     return Promise.reject(new Error('Missing parameter : rolesIds'))
@@ -117,10 +124,17 @@ export const postRolesGetRolesAll = function(parameters = {}) {
   let body = {};
   let queryParameters = {};
   let formData = new FormData();
+  if (parameters.$config) {
+    delete parameters.$config;
+  }
+  if (parameters.$domain) {
+    delete parameters.$domain;
+  }
   if (parameters.$body) {
-    body = parameters.$body;
-  } else {
-    body = parameters
+    delete parameters.$body;
+  }
+  body = {
+    ...parameters
   }
   if (parameters['page'] === undefined) {
     return Promise.reject(new Error('Missing parameter : page'))
@@ -220,10 +234,17 @@ export const postRolesSaveRoles = function(parameters = {}) {
   let body = {};
   let queryParameters = {};
   let formData = new FormData();
+  if (parameters.$config) {
+    delete parameters.$config;
+  }
+  if (parameters.$domain) {
+    delete parameters.$domain;
+  }
   if (parameters.$body) {
-    body = parameters.$body;
-  } else {
-    body = parameters
+    delete parameters.$body;
+  }
+  body = {
+    ...parameters
   }
   if (parameters.$queryParameters) {
     Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -267,10 +288,17 @@ export const postRolesSaveRolesByUserId = function(parameters = {}) {
   let body = {};
   let queryParameters = {};
   let formData = new FormData();
+  if (parameters.$config) {
+    delete parameters.$config;
+  }
+  if (parameters.$domain) {
+    delete parameters.$domain;
+  }
   if (parameters.$body) {
-    body = parameters.$body;
-  } else {
-    body = parameters
+    delete parameters.$body;
+  }
+  body = {
+    ...parameters
   }
   if (parameters['rolesAll'] === undefined) {
     return Promise.reject(new Error('Missing parameter : rolesAll'))
@@ -318,10 +346,17 @@ export const postRolesSyncRoles = function(parameters = {}) {
   let body = {};
   let queryParameters = {};
   let formData = new FormData();
+  if (parameters.$config) {
+    delete parameters.$config;
+  }
+  if (parameters.$domain) {
+    delete parameters.$domain;
+  }
   if (parameters.$body) {
-    body = parameters.$body;
-  } else {
-    body = parameters
+    delete parameters.$body;
+  }
+  body = {
+    ...parameters
   }
   if (parameters.$queryParameters) {
     Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -354,7 +389,8 @@ export const postRolesSyncRolesURL = function(parameters = {}) {
  * url: postTableDeleteTableURL
  * method: postTableDeleteTable_TYPE
  * raw_url: postTableDeleteTable_RAW_URL
- * @param tableEntity - tableEntity
+ * @param map - map
+ * @param tableIds - 唯一id
  */
 export const postTableDeleteTable = function(parameters = {}) {
   const domain = parameters.$domain ? parameters.$domain : getDomain()
@@ -363,10 +399,20 @@ export const postTableDeleteTable = function(parameters = {}) {
   let body = {};
   let queryParameters = {};
   let formData = new FormData();
+  if (parameters.$config) {
+    delete parameters.$config;
+  }
+  if (parameters.$domain) {
+    delete parameters.$domain;
+  }
   if (parameters.$body) {
-    body = parameters.$body;
-  } else {
-    body = parameters
+    delete parameters.$body;
+  }
+  body = {
+    ...parameters
+  }
+  if (parameters['tableIds'] === undefined) {
+    return Promise.reject(new Error('Missing parameter : tableIds'))
   }
   if (parameters.$queryParameters) {
     Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -394,36 +440,176 @@ export const postTableDeleteTableURL = function(parameters = {}) {
   return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
 }
 /**
- * getTableAll
- * request: getTableGetTableAll
- * url: getTableGetTableAllURL
- * method: getTableGetTableAll_TYPE
- * raw_url: getTableGetTableAll_RAW_URL
+ * exportData
+ * request: postTableExportData
+ * url: postTableExportDataURL
+ * method: postTableExportData_TYPE
+ * raw_url: postTableExportData_RAW_URL
+ * @param containing - 模糊搜索Obj
+ * @param page - 当前页
+ * @param pageSize - 一页多少个
+ * @param searchEntity - searchEntity
+ * @param sort - 升降序
+ * @param sortKey - 升降序的键
  */
-export const getTableGetTableAll = function(parameters = {}) {
+export const postTableExportData = function(parameters = {}) {
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  const config = parameters.$config
+  let path = '/table/exportData'
+  let body = {};
+  let queryParameters = {};
+  let formData = new FormData();
+  if (parameters['page'] === undefined) {
+    return Promise.reject(new Error('Missing parameter : page'))
+  }
+  if (parameters['pageSize'] === undefined) {
+    return Promise.reject(new Error('Missing parameter : pageSize'))
+  }
+  if (parameters.$config) {
+    delete parameters.$config;
+  }
+  if (parameters.$domain) {
+    delete parameters.$domain;
+  }
+  if (parameters.$body) {
+    delete parameters.$body;
+  }
+  body = {
+    ...parameters
+  }
+  if (parameters['sort'] === undefined) {
+    return Promise.reject(new Error('Missing parameter : sort'))
+  }
+  if (parameters['sortKey'] === undefined) {
+    return Promise.reject(new Error('Missing parameter : sortKey'))
+  }
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    });
+  }
+  return request('post', domain + path, body, queryParameters, formData, config)
+}
+export const postTableExportData_RAW_URL = function() {
+  return '/table/exportData'
+}
+export const postTableExportData_TYPE = function() {
+  return 'post'
+}
+export const postTableExportDataURL = function(parameters = {}) {
+  let queryParameters = {}
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  let path = '/table/exportData'
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    })
+  }
+  let keys = Object.keys(queryParameters)
+  return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
+}
+/**
+ * getTableAll
+ * request: postTableGetTableAll
+ * url: postTableGetTableAllURL
+ * method: postTableGetTableAll_TYPE
+ * raw_url: postTableGetTableAll_RAW_URL
+ * @param containing - 模糊搜索Obj
+ * @param page - 当前页
+ * @param pageSize - 一页多少个
+ * @param searchEntity - searchEntity
+ * @param sort - 升降序
+ * @param sortKey - 升降序的键
+ */
+export const postTableGetTableAll = function(parameters = {}) {
   const domain = parameters.$domain ? parameters.$domain : getDomain()
   const config = parameters.$config
   let path = '/table/getTableAll'
   let body = {};
   let queryParameters = {};
   let formData = new FormData();
+  if (parameters['page'] === undefined) {
+    return Promise.reject(new Error('Missing parameter : page'))
+  }
+  if (parameters['pageSize'] === undefined) {
+    return Promise.reject(new Error('Missing parameter : pageSize'))
+  }
+  if (parameters.$config) {
+    delete parameters.$config;
+  }
+  if (parameters.$domain) {
+    delete parameters.$domain;
+  }
+  if (parameters.$body) {
+    delete parameters.$body;
+  }
+  body = {
+    ...parameters
+  }
+  if (parameters['sort'] === undefined) {
+    return Promise.reject(new Error('Missing parameter : sort'))
+  }
+  if (parameters['sortKey'] === undefined) {
+    return Promise.reject(new Error('Missing parameter : sortKey'))
+  }
   if (parameters.$queryParameters) {
     Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
       queryParameters[parameterName] = parameters.$queryParameters[parameterName]
     });
   }
-  return request('get', domain + path, body, queryParameters, formData, config)
+  return request('post', domain + path, body, queryParameters, formData, config)
 }
-export const getTableGetTableAll_RAW_URL = function() {
+export const postTableGetTableAll_RAW_URL = function() {
   return '/table/getTableAll'
 }
-export const getTableGetTableAll_TYPE = function() {
-  return 'get'
+export const postTableGetTableAll_TYPE = function() {
+  return 'post'
 }
-export const getTableGetTableAllURL = function(parameters = {}) {
+export const postTableGetTableAllURL = function(parameters = {}) {
   let queryParameters = {}
   const domain = parameters.$domain ? parameters.$domain : getDomain()
   let path = '/table/getTableAll'
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    })
+  }
+  let keys = Object.keys(queryParameters)
+  return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
+}
+/**
+ * importExcel
+ * request: postTableImportData
+ * url: postTableImportDataURL
+ * method: postTableImportData_TYPE
+ * raw_url: postTableImportData_RAW_URL
+ * @param file - file
+ */
+export const postTableImportData = function(parameters = {}) {
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  const config = parameters.$config
+  let path = '/table/importData'
+  let body = {};
+  let queryParameters = {};
+  let formData = new FormData();
+  formData.append('file', parameters['file'])
+  if (parameters.$queryParameters) {
+    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+    });
+  }
+  return request('post', domain + path, body, queryParameters, formData, config)
+}
+export const postTableImportData_RAW_URL = function() {
+  return '/table/importData'
+}
+export const postTableImportData_TYPE = function() {
+  return 'post'
+}
+export const postTableImportDataURL = function(parameters = {}) {
+  let queryParameters = {}
+  const domain = parameters.$domain ? parameters.$domain : getDomain()
+  let path = '/table/importData'
   if (parameters.$queryParameters) {
     Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
       queryParameters[parameterName] = parameters.$queryParameters[parameterName]
@@ -447,10 +633,17 @@ export const postTableSaveTable = function(parameters = {}) {
   let body = {};
   let queryParameters = {};
   let formData = new FormData();
+  if (parameters.$config) {
+    delete parameters.$config;
+  }
+  if (parameters.$domain) {
+    delete parameters.$domain;
+  }
   if (parameters.$body) {
-    body = parameters.$body;
-  } else {
-    body = parameters
+    delete parameters.$body;
+  }
+  body = {
+    ...parameters
   }
   if (parameters.$queryParameters) {
     Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -493,10 +686,17 @@ export const postTestDeleteTest = function(parameters = {}) {
   let body = {};
   let queryParameters = {};
   let formData = new FormData();
+  if (parameters.$config) {
+    delete parameters.$config;
+  }
+  if (parameters.$domain) {
+    delete parameters.$domain;
+  }
   if (parameters.$body) {
-    body = parameters.$body;
-  } else {
-    body = parameters
+    delete parameters.$body;
+  }
+  body = {
+    ...parameters
   }
   if (parameters['testIds'] === undefined) {
     return Promise.reject(new Error('Missing parameter : testIds'))
@@ -545,10 +745,17 @@ export const postTestGetTestAll = function(parameters = {}) {
   let body = {};
   let queryParameters = {};
   let formData = new FormData();
+  if (parameters.$config) {
+    delete parameters.$config;
+  }
+  if (parameters.$domain) {
+    delete parameters.$domain;
+  }
   if (parameters.$body) {
-    body = parameters.$body;
-  } else {
-    body = parameters
+    delete parameters.$body;
+  }
+  body = {
+    ...parameters
   }
   if (parameters['page'] === undefined) {
     return Promise.reject(new Error('Missing parameter : page'))
@@ -602,10 +809,17 @@ export const postTestSaveTest = function(parameters = {}) {
   let body = {};
   let queryParameters = {};
   let formData = new FormData();
+  if (parameters.$config) {
+    delete parameters.$config;
+  }
+  if (parameters.$domain) {
+    delete parameters.$domain;
+  }
   if (parameters.$body) {
-    body = parameters.$body;
-  } else {
-    body = parameters
+    delete parameters.$body;
+  }
+  body = {
+    ...parameters
   }
   if (parameters.$queryParameters) {
     Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -1065,10 +1279,17 @@ export const postUserDeleteUser = function(parameters = {}) {
   let body = {};
   let queryParameters = {};
   let formData = new FormData();
+  if (parameters.$config) {
+    delete parameters.$config;
+  }
+  if (parameters.$domain) {
+    delete parameters.$domain;
+  }
   if (parameters.$body) {
-    body = parameters.$body;
-  } else {
-    body = parameters
+    delete parameters.$body;
+  }
+  body = {
+    ...parameters
   }
   if (parameters['userIds'] === undefined) {
     return Promise.reject(new Error('Missing parameter : userIds'))
@@ -1119,10 +1340,17 @@ export const postUserGetUserAll = function(parameters = {}) {
   let body = {};
   let queryParameters = {};
   let formData = new FormData();
+  if (parameters.$config) {
+    delete parameters.$config;
+  }
+  if (parameters.$domain) {
+    delete parameters.$domain;
+  }
   if (parameters.$body) {
-    body = parameters.$body;
-  } else {
-    body = parameters
+    delete parameters.$body;
+  }
+  body = {
+    ...parameters
   }
   if (parameters['page'] === undefined) {
     return Promise.reject(new Error('Missing parameter : page'))
@@ -1235,10 +1463,17 @@ export const postUserLogin = function(parameters = {}) {
   if (parameters['user'] === undefined) {
     return Promise.reject(new Error('Missing parameter : user'))
   }
+  if (parameters.$config) {
+    delete parameters.$config;
+  }
+  if (parameters.$domain) {
+    delete parameters.$domain;
+  }
   if (parameters.$body) {
-    body = parameters.$body;
-  } else {
-    body = parameters
+    delete parameters.$body;
+  }
+  body = {
+    ...parameters
   }
   if (parameters['uuid'] === undefined) {
     return Promise.reject(new Error('Missing parameter : uuid'))
@@ -1379,10 +1614,17 @@ export const postUserSaveUser = function(parameters = {}) {
   if (parameters['code'] !== undefined) {
     queryParameters['code'] = parameters['code']
   }
+  if (parameters.$config) {
+    delete parameters.$config;
+  }
+  if (parameters.$domain) {
+    delete parameters.$domain;
+  }
   if (parameters.$body) {
-    body = parameters.$body;
-  } else {
-    body = parameters
+    delete parameters.$body;
+  }
+  body = {
+    ...parameters
   }
   if (parameters.$queryParameters) {
     Object.keys(parameters.$queryParameters).forEach(function(parameterName) {

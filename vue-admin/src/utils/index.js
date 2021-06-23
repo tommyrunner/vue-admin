@@ -5,6 +5,59 @@ import i18n from '@/lang/i18n'
  */
 
 /**
+ * 下载blob文件
+ * @param {functions(){}} Api 函数-调用的api
+ * @param {Object} params api需要传入的参数,默认以blob下载
+ * @param {String} dowFileName 下载后的文件名默认dowFile
+ * @param {String} dowFileSuf 下载后的文件名默认 xlsx
+ * @returns
+ */
+export function dowBlobFile(Api = function() {}, params = {}, dowFileName = 'dowFile', dowFileSuf = 'xlsx') {
+  // 默认以blob类型下载
+  params = JSON.parse(JSON.stringify(params))
+  params.$config = {
+    responseType: 'blob'
+  }
+  return new Promise((resolve, reject) => {
+    Api(params)
+      .then((res) => {
+        // 下载成功
+        if (res.status === 200) {
+          // 获取数据
+          const content = res.data
+          const blob = new Blob([content])
+          // 如果文件不为空
+          if (blob.size > 0) {
+            // 使用a标签模拟点击下载
+            const elink = document.createElement('a')
+            // 给下载的文件名加上日期
+            const date = new Date()
+            const dateFrom = `${date.getFullYear()}-${date.getMonth() +
+              1}-${date.getDate()} ${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}`
+            elink.download = `${dowFileName} ${dateFrom} .${dowFileSuf}`
+            elink.style.display = 'none'
+            elink.href = URL.createObjectURL(blob)
+            document.body.appendChild(elink)
+            elink.click()
+            // 清空
+            URL.revokeObjectURL(elink.href)
+            document.body.removeChild(elink)
+          } else {
+            reject(new Error('下载文件失败-文件为空!'))
+          }
+        } else {
+          reject(new Error('获取文件失败!'))
+        }
+        // 下载成功
+        resolve()
+      })
+      .catch((e) => {
+        reject(e)
+      })
+  })
+}
+
+/**
  * Parse the time to string
  * @param {(Object|string|number)} time
  * @param {string} cFormat

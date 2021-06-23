@@ -6,7 +6,7 @@ Vue.use(Router)
 /* Layout */
 import Layout from '@/layout'
 import managementRoute from './module/management'
-import tableRoute from './module/table'
+import dataRoute from './module/data'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -33,7 +33,7 @@ import tableRoute from './module/table'
  * all roles can be accessed
  */
 export const rolesRoutes = [
-  tableRoute,
+  dataRoute,
   managementRoute,
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true, children: [] }

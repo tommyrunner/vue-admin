@@ -8,6 +8,11 @@ import 'element-ui/lib/theme-chalk/index.css'
 import i18n from '@/lang/i18n.js'
 import lang from '@/lang/lang.js'
 window.lang = lang
+//element-ui为了兼容vue-i18n@6.x
+Vue.use(ElementUI, {
+  i18n: (key, value) => i18n.t(key, value)
+})
+
 import '@/styles/index.scss' // global css
 import App from './App'
 import store from './store'

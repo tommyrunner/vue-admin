@@ -1,5 +1,6 @@
 package com.tommy.vueadmin.entity;
 
+import cn.afterturn.easypoi.excel.annotation.Excel;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -13,10 +14,13 @@ public class TableEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id = 0;
+    @Excel(name = "值", orderNum = "0")
     @Column(nullable = false)
-    Integer userId;
-    @Column(nullable = false)
-    String value;
-    @Column(nullable = true)
-    String note;
+    String value  = "";
+    @Excel(name = "用户", orderNum = "0")
+    @Column (nullable = false) 
+    String user  = "";
+    @Excel(name = "备注", orderNum = "0")
+    @Column (nullable = false) 
+    String note  = "";
 }

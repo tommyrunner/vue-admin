@@ -4,12 +4,15 @@
       <template v-slot:title>
         <el-row :gutter="10" class="search-row">
           <el-col :span="3">
-            <el-input v-model.trim="form.key1" size="mini" placeholder="值1"></el-input>
+            <el-input v-model.trim="form.value" size="mini" placeholder="值"></el-input>
           </el-col>
           <el-col :span="3">
-            <el-input v-model.trim="form.key2" size="mini" placeholder="值2"></el-input>
+            <el-input v-model.trim="form.user" size="mini" placeholder="用户"></el-input>
           </el-col>
-          <el-col :span="3" :offset="6">
+          <el-col :span="3">
+            <el-input v-model.trim="form.note" size="mini" placeholder="备注"></el-input>
+          </el-col>
+          <el-col :span="3" :offset="11">
             <div class="btn">
               <el-button icon="el-icon-search" circle @click="search"></el-button>
               <el-button type="warning" icon="el-icon-refresh" circle @click="refresh"></el-button>
@@ -22,8 +25,10 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'SearchTable',
+
   data() {
     return {
       form: this.initForm(),
@@ -45,13 +50,14 @@ export default {
       this.$emit('onRefresh', this.searchParams)
     },
     search() {
-      this.searchParams = Object.assign(this.searchParams, this.form)
+      this.searchParams.containing = this.form
       this.$emit('onSearch', this.searchParams)
     },
     initForm() {
       return {
-        key1: '',
-        key2: '',
+        value: '',
+        user: '',
+        note: ''
       }
     },
     initSearch() {
@@ -59,9 +65,7 @@ export default {
         page: 1,
         pageSize: 2,
         sort: 'DESC',
-        sortKey: 'id',
-        key1: '',
-        key2: '',
+        sortKey: 'id'
       }
     }
   }

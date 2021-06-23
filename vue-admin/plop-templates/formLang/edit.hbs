@@ -1,27 +1,28 @@
 <template>
   <wb-dialog ref="dialog" @cancel="cancel" @sublimt="sublimt" v-loading="loading">
     <el-form ref="form" :rules="rules" :model="form" label-width="80px">
-      <el-form-item label="值" prop="value">
-        <el-input v-model="form.value" placeholder="值"></el-input>
+       {{#each edit}}
+      <el-form-item label="{{this.label}}" prop="{{this.key}}">
+        <el-input v-model="form.{{this.key}}" placeholder="{{this.label}}"></el-input>
       </el-form-item>
-      <el-form-item label="备注" prop="note">
-        <el-input v-model="form.note" placeholder="备注"></el-input>
-      </el-form-item>
+        {{/each}}
     </el-form>
   </wb-dialog>
 </template>
 <script>
 import { $Loading } from '@/utils'
+
 export default {
-  name: 'EditTest',
+  name: 'Edit{{Api}}',
   data() {
     return {
       form: this.initForm(),
       loading: true,
       isEdit: false,
       rules: {
-        value: [{ required: true, message: '请输入值', trigger: 'blur' }],
-        note: [{ required: true, message: '请输入备注', trigger: 'blur' }]
+        {{#each edit}}
+        {{this.key}}: [{ required: true, message: '请输入{{this.label}}', trigger: 'blur' }],
+        {{/each}}
       }
     }
   },
@@ -30,11 +31,11 @@ export default {
     showEdit(item) {
       this.isEdit = !item
       if (item) {
-        this.$refs.dialog.showDialog(`${this.$t('form.update')}菜单`)
+        this.$refs.dialog.showDialog(`${this.$t('form.update')}{{formName}}`)
         //回显数据
         this.form = Object.assign({}, item)
       } else {
-        this.$refs.dialog.showDialog(`${this.$t('form.new')}菜单`)
+        this.$refs.dialog.showDialog(`${this.$t('form.new')}{{formName}}`)
         //清空
         this.form = this.initForm()
       }
@@ -42,8 +43,9 @@ export default {
     // 初始化
     initForm() {
       return {
-        value: '',
-        note: ''
+      {{#each edit}}
+        {{this.key}}: '',
+      {{/each}}
       }
     },
     closeDialog() {
@@ -68,4 +70,5 @@ export default {
   }
 }
 </script>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+</style>

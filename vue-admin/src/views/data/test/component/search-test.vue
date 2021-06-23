@@ -45,7 +45,7 @@ export default {
       this.$emit('onRefresh', this.searchParams)
     },
     search() {
-      this.searchParams = Object.assign(this.searchParams, this.form)
+      this.searchParams.containing = this.form
       this.$emit('onSearch', this.searchParams)
     },
     initForm() {
@@ -60,8 +60,6 @@ export default {
         pageSize: 2,
         sort: 'DESC',
         sortKey: 'id',
-        value: '',
-        note: '',
       }
     }
   }

@@ -42,11 +42,16 @@ export const {{&methodName}} = function(parameters = {}) {
     {{/isBodyParameter}}
 
     {{#$body}}
-        if(parameters.$body){
-            body = parameters.$body;
-        }else{
-            body = parameters
-        }
+        if (parameters.$config) {
+            delete parameters.$config;
+        } 
+        if (parameters.$domain) {
+            delete parameters.$domain;
+        } 
+        if (parameters.$body) {
+            delete parameters.$body;
+        } 
+        body = { ...parameters}
     {{/$body}}
 
     {{#isFormParameter}}

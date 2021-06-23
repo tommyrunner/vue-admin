@@ -1,5 +1,8 @@
 import Cookies from 'js-cookie'
 import { constantRoutes } from '@/router'
+import i18n from '@/lang/i18n'
+import langEn from 'element-ui/lib/locale/lang/en'
+import langZh from 'element-ui/lib/locale/lang/zh-CN'
 
 const state = {
   sidebar: {
@@ -7,7 +10,11 @@ const state = {
     withoutAnimation: false
   },
   routes: [],
-  device: 'desktop'
+  device: 'desktop',
+  langs: [
+    { label: i18n.t('langs.zh'), value: 'zh', eleLang: langZh },
+    { label: i18n.t('langs.en'), value: 'en', eleLang: langEn }
+  ]
 }
 
 const mutations = {

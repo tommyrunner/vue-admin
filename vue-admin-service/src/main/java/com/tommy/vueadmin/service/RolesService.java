@@ -2,6 +2,7 @@ package com.tommy.vueadmin.service;
 
 import com.tommy.vueadmin.aop.ApiUserAuth;
 import com.tommy.vueadmin.dao.RolesDao;
+import com.tommy.vueadmin.dao.UserDao;
 import com.tommy.vueadmin.dao.UserRolesDao;
 import com.tommy.vueadmin.entity.RolesEntity;
 import com.tommy.vueadmin.entity.UserEntity;
@@ -31,6 +32,8 @@ public class RolesService {
     RolesDao rolesDao;
     @Autowired
     UserRolesDao userRolesDao;
+    @Autowired
+    UserDao userDao;
 
 //    根据菜单ui查询菜单
     public Map<String,Object> getRolesByUserIdAllService(int userId){
@@ -114,11 +117,14 @@ public class RolesService {
     }
     //同步菜单
     @ApiUserAuth(msg = "没有权限哦!", auth = DataBase.ADMIN_USERNAME)
+    @Transactional
     public Map<String, Object> syncRolesService(String token, List<RolesEntity> rolesEntities) {
         List<RolesEntity> all = rolesDao.findAll();
+        List<String> rolesNames = new ArrayList<>();
         //去重并添加
         for(int i = rolesEntities.size()-1;i>=0;i--){
             RolesEntity rolesEntity = rolesEntities.get(i);
+            rolesNames.add(rolesEntity.getRoles());
             for(RolesEntity item2 : all){
                 if(rolesEntity.getRoles().equals(item2.getRoles())){
                     //发现有相同roles
@@ -129,6 +135,14 @@ public class RolesService {
         }
         //多个添加
         List<RolesEntity> saves = rolesDao.saveAll(rolesEntities);
+        //并且同步超级用户
+        UserEntity userEntity = userDao.findById(1).get();
+        if(userEntity.getUser().equals(DataBase.ADMIN_USERNAME)){
+            Map<String,Object> allMap = new HashMap<>();
+            allMap.put("userId",1);
+            allMap.put("rolesAll",rolesNames);
+            saveRolesByUserService(allMap);
+        }
         return ReturnDateUtil.returnData(ReturnDateUtil.CODE_OK, "同步成功!",saves.size() );
     }
 }

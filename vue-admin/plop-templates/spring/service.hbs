@@ -5,21 +5,20 @@ public class {{Module}}Service {
     {{Module}}Dao {{module}}Dao;
 
     //查询+模糊
-    public Map<String, Object> get{{Module}}AllService( Map<String,Object> map) {
+    public Map<String, Object> get{{Module}}AllService( SearchEntity<{{Module}}Entity> searchEntity) {
         //获取相应参数
-        Integer page = (Integer) map.getOrDefault("page",1);
-        Integer pageSize = (Integer) map.getOrDefault("pageSize",10);
-        String sort = (String) map.getOrDefault("sort","DESC");
-        String sortKey = (String) map.getOrDefault("sortKey","id");
-        {{#each entity}}
-        {{this.type}} {{this.key}} = ({{this.type}}) map.getOrDefault("{{this.key}}","");
-        {{/each}}
-        Sort sortObj = Sort.by(MyUtils.getSort(sort), sortKey);
-        Pageable pageable = PageRequest.of(page-1, pageSize,sortObj);
-        List<{{Module}}Entity> allContains = {{module}}Dao.findAllBy{{#each entity}}{{this.Key}}ContainingAnd{{/each}}  ({{#each entity}} {{this.key}},{{/each}}pageable);
-        Map<String,Object> returnMap = new HashMap<>();
-        returnMap.put("size",{{module}}Dao.countAllBy{{#each entity}}{{this.Key}}ContainingAnd{{/each}}  ({{#each entity}} {{this.key}},{{/each}}));
-        returnMap.put("list",allContains);
+        Sort sortObj = Sort.by(MyUtils.getSort(searchEntity.getSort()), searchEntity.getSortKey());//获取检索key
+        Pageable pageable = PageRequest.of(searchEntity.getPage() - 1, searchEntity.getPageSize(), sortObj); //获取分页
+        {{Module}}Entity {{module}}Entity = searchEntity.getContaining()==null?new {{Module}}Entity():searchEntity.getContaining();//获取模糊对象
+        //查询
+        List<{{Module}}Entity> allContains = {{module}}Dao.findAllBy{{#each entity}}{{this.Key}}ContainingAnd{{/each}}
+                ( {{#each entity}} {{../module}}Entity.get{{this.Key}}(),{{/each}}  pageable);
+        //封装
+        Map<String, Object> returnMap = new HashMap<>();
+        //查询全部
+        returnMap.put("size", {{module}}Dao.countAllBy{{#each entity}}{{this.Key}}ContainingAnd{{/each}}
+                ( {{#each entity}} {{../module}}Entity.get{{this.Key}}(),{{/each}} ));
+        returnMap.put("list", allContains);
         return ReturnDateUtil.returnData(ReturnDateUtil.CODE_OK, "获取成功!", returnMap);
     }
     //批量删除

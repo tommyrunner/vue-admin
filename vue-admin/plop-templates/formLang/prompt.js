@@ -3,7 +3,7 @@ const { notEmpty } = require('../utils') // 自己定义的一个工具方法-�
 const formJson = require('./config.json')
 
 module.exports = {
-  description: '自动按模板生成 表单', // 描述这个generate的作用
+  description: '自动按模板生成 表单-国际化', // 描述这个generate的作用
   prompts: [
     {
       type: 'input', // 问题的类型

@@ -21,6 +21,9 @@
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
+      <el-select class="lang-select" size="mini" v-model="lang" placeholder="请选择" @change="setLang">
+        <el-option v-for="item in langs" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+      </el-select>
     </div>
   </div>
 </template>
@@ -30,15 +33,32 @@ import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import { $Loading } from '@/utils'
+import Vue from 'vue'
 export default {
   components: {
     Breadcrumb,
     Hamburger
   },
   computed: {
-    ...mapGetters(['sidebar', 'userInfo'])
+    ...mapGetters(['sidebar', 'userInfo', 'langs'])
+  },
+  data() {
+    return {
+      lang: 'zh'
+    }
+  },
+  mounted() {
+    this.lang = sessionStorage.getItem('lang')
   },
   methods: {
+    setLang() {
+      this.$t.locale = this.lang
+      sessionStorage.setItem('lang', this.lang)
+      // 设置element语言
+      const eleLangItem = this.langs.filter((item) => item.value === this.lang)[0]
+      Vue.config.lang = 'zh'
+      location.reload()
+    },
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
     },
@@ -128,5 +148,13 @@ export default {
       }
     }
   }
+}
+::v-deep .el-input--mini .el-input__inner {
+  border: 0;
+}
+.lang-select {
+  margin-right: 10px;
+  margin-left: 10px;
+  width: 80px;
 }
 </style>

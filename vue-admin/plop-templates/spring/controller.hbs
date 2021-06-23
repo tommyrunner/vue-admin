@@ -14,10 +14,11 @@ public class {{Module}}Controller {
             @ApiImplicitParam(value = "一页多少个", name = "pageSize", required = true),
             @ApiImplicitParam(value = "升降序", name = "sort", required = true),
             @ApiImplicitParam(value = "升降序的键", name = "sortKey", required = true),
+            @ApiImplicitParam(value = "模糊搜索Obj", name = "containing", required = false),
     })
-    public Map<String, Object> get{{Module}}All(@RequestBody(required = false) Map<String,Object> map) {
-        log.debug("-------------------getUserAll:获取全部{{Module}}-------------");
-        return {{module}}Service.get{{Module}}AllService(map);
+    public Map<String, Object> get{{Module}}All(@RequestBody(required = false) SearchEntity<{{Module}}Entity> searchEntity) {
+        log.debug("-------------------get{{Module}}All:获取全部{{Module}}-------------");
+        return {{module}}Service.get{{Module}}AllService(searchEntity);
     }
     @PostMapping("/delete{{Module}}")
     //必传参数,提示客户端
@@ -25,13 +26,13 @@ public class {{Module}}Controller {
             @ApiImplicitParam(value = "唯一id", name = "{{module}}Ids", required = true),
     })
     public Map<String, Object> delete{{Module}}(@RequestBody(required = false) Map<String, List<Integer>> map) {
-        log.debug("-------------------getUserAll:获取全部{{Module}}-------------");
+        log.debug("-------------------delete{{Module}}:获取全部{{Module}}-------------");
         List<Integer> {{module}}Ids = map.get("{{module}}Ids");
         return {{module}}Service.delete{{Module}}Service( {{module}}Ids);
     }
     @PostMapping("/save{{Module}}")
     public Map<String, Object> save{{Module}}(@RequestBody(required = false) {{Module}}Entity {{module}}Entity) {
-        log.debug("-------------------PostMapping:添加{{Module}}-------------");
+        log.debug("-------------------save{{Module}}:添加{{Module}}-------------");
         return {{module}}Service.save{{Module}}Service({{module}}Entity);
     }
 }

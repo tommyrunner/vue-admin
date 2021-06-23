@@ -4,6 +4,7 @@ const getters = {
   token: (state) => state.user.token,
   userInfo: (state) => state.user.userInfo,
   userRoles: (state) => state.user.roles,
+  langs: (state) => state.app.langs,
   //动态获取的路由
   permission_routes: (state) => state.permission.routes
 }

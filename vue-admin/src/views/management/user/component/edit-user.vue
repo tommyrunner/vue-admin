@@ -126,7 +126,7 @@ export default {
         this.$nextTick(() => {
           //初始化
           //获取app路由
-          this.appRoles = rolesRoutes
+          this.appRoles = rolesRoutes.filter((item) => item.children && item.children.length > 0)
           this.$refs.tree.setCheckedKeys([])
           //显示权限
           this.defSelectRoels = userRoles

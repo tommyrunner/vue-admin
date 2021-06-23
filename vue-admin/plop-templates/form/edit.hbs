@@ -31,11 +31,11 @@ export default {
     showEdit(item) {
       this.isEdit = !item
       if (item) {
-        this.$refs.dialog.showDialog('编辑菜单')
+        this.$refs.dialog.showDialog('编辑{{formName}}')
         //回显数据
         this.form = Object.assign({}, item)
       } else {
-        this.$refs.dialog.showDialog('添加菜单')
+        this.$refs.dialog.showDialog('添加{{formName}}')
         //清空
         this.form = this.initForm()
       }

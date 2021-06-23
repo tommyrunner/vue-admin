@@ -1,25 +1,24 @@
 /* Layout */
 import Layout from '@/layout'
-const tableRoute = {
+const dataRoute = {
   path: '/data',
   component: Layout,
-  redirect: '/example/table',
+  redirect: '/data/test',
   name: 'Data',
   meta: { title: 'Data', icon: 'data' },
   children: [
     {
-      path: 'table',
-      name: 'DataTable',
-      // component: () => import('@/views/data/table/index'),
-      meta: { title: 'DataTable', icon: 'table' }
-    },
-    {
       path: 'test',
       name: 'DataTest',
-      hidden: true,
       component: () => import('@/views/data/test/index'),
       meta: { title: 'DataTest', icon: 'test' }
+    },
+    {
+      path: 'table',
+      name: 'DataTable',
+      component: () => import('@/views/data/table/index'),
+      meta: { title: 'DataTable', icon: 'table' }
     }
   ]
 }
-export default tableRoute
+export default dataRoute

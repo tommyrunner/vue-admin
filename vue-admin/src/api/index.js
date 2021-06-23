@@ -28,7 +28,8 @@ export function setApi(http, setBaseUrl, path) {
     },
     // 错误拦截
     async ({ errorResponse }) => {
-      return Promise.reject(errorResponse.data) // 返回接口返回的错误信息
+      console.log('-------接口错误:')
+      return Promise.reject(errorResponse) // 返回接口返回的错误信息
     }
   )
 }

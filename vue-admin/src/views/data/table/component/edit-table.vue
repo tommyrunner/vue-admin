@@ -1,18 +1,21 @@
 <template>
   <wb-dialog ref="dialog" @cancel="cancel" @sublimt="sublimt" v-loading="loading">
     <el-form ref="form" :rules="rules" :model="form" label-width="80px">
-      <el-form-item label="值1" prop="key1">
-        <el-input v-model="form.key1" placeholder="值1"></el-input>
+      <el-form-item label="值" prop="value">
+        <el-input v-model="form.value" placeholder="值"></el-input>
       </el-form-item>
-      <el-form-item label="值2" prop="key2">
-        <el-input v-model="form.key2" placeholder="值2"></el-input>
+      <el-form-item label="用户" prop="user">
+        <el-input v-model="form.user" disabled placeholder="用户"></el-input>
+      </el-form-item>
+      <el-form-item label="备注" prop="note">
+        <el-input v-model="form.note" placeholder="备注"></el-input>
       </el-form-item>
     </el-form>
   </wb-dialog>
 </template>
 <script>
 import { $Loading } from '@/utils'
-
+import { mapGetters } from 'vuex'
 export default {
   name: 'EditTable',
   data() {
@@ -21,10 +24,14 @@ export default {
       loading: true,
       isEdit: false,
       rules: {
-        key1: [{ required: true, message: '请输入值1', trigger: 'blur' }],
-        key2: [{ required: true, message: '请输入值2', trigger: 'blur' }],
+        value: [{ required: true, message: '请输入值', trigger: 'blur' }],
+        user: [{ required: true, message: '请输入用户', trigger: 'blur' }],
+        note: [{ required: true, message: '请输入备注', trigger: 'blur' }]
       }
     }
+  },
+  computed: {
+    ...mapGetters(['userInfo'])
   },
   methods: {
     // 显示
@@ -38,13 +45,16 @@ export default {
         this.$refs.dialog.showDialog('添加菜单')
         //清空
         this.form = this.initForm()
+        //自动填充用户
+        this.form.user = this.userInfo.user
       }
     },
     // 初始化
     initForm() {
       return {
-        key1: '',
-        key2: '',
+        value: '',
+        user: '',
+        note: ''
       }
     },
     closeDialog() {
@@ -69,5 +79,4 @@ export default {
   }
 }
 </script>
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

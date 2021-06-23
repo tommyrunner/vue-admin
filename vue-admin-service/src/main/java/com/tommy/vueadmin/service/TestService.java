@@ -1,6 +1,7 @@
 package com.tommy.vueadmin.service;
 
 import com.tommy.vueadmin.dao.TestDao;
+import com.tommy.vueadmin.entity.SearchEntity;
 import com.tommy.vueadmin.entity.TestEntity;
 import com.tommy.vueadmin.utils.MyUtils;
 import com.tommy.vueadmin.utils.ReturnDateUtil;
@@ -22,20 +23,20 @@ public class TestService {
     TestDao testDao;
 
     //查询+模糊
-    public Map<String, Object> getTestAllService( Map<String,Object> map) {
+    public Map<String, Object> getTestAllService( SearchEntity<TestEntity> searchEntity) {
         //获取相应参数
-        Integer page = (Integer) map.getOrDefault("page",1);
-        Integer pageSize = (Integer) map.getOrDefault("pageSize",10);
-        String sort = (String) map.getOrDefault("sort","DESC");
-        String sortKey = (String) map.getOrDefault("sortKey","id");
-        String value = (String) map.getOrDefault("value","");
-        String note = (String) map.getOrDefault("note","");
-        Sort sortObj = Sort.by(MyUtils.getSort(sort), sortKey);
-        Pageable pageable = PageRequest.of(page-1, pageSize,sortObj);
-        List<TestEntity> allContains = testDao.findAllByValueContainingAndNoteContaining  ( value, note,pageable);
-        Map<String,Object> returnMap = new HashMap<>();
-        returnMap.put("size",testDao.countAllByValueContainingAndNoteContaining ( value, note));
-        returnMap.put("list",allContains);
+        Sort sortObj = Sort.by(MyUtils.getSort(searchEntity.getSort()), searchEntity.getSortKey());//获取检索key
+        Pageable pageable = PageRequest.of(searchEntity.getPage() - 1, searchEntity.getPageSize(), sortObj); //获取分页
+        TestEntity testEntity = searchEntity.getContaining()==null?new TestEntity():searchEntity.getContaining();//获取模糊对象
+        //查询
+        List<TestEntity> allContains = testDao.findAllByValueContainingAndNoteContaining
+                (  testEntity.getValue(), testEntity.getNote(),  pageable);
+        //封装
+        Map<String, Object> returnMap = new HashMap<>();
+        //查询全部
+        returnMap.put("size", testDao.countAllByValueContainingAndNoteContaining
+                (  testEntity.getValue(), testEntity.getNote() ));
+        returnMap.put("list", allContains);
         return ReturnDateUtil.returnData(ReturnDateUtil.CODE_OK, "获取成功!", returnMap);
     }
     //批量删除

@@ -14,7 +14,7 @@ public class TestEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id = 0;
     @Column(nullable = false)
-    String value = "";
-    @Column(nullable = false)
-    String note = "";
+    String value  = "";
+    @Column (nullable = false) 
+    String note  = "";
 }
