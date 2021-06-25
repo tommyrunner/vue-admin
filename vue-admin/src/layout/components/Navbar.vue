@@ -21,7 +21,7 @@
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      <el-select class="lang-select" size="mini" v-model="lang" placeholder="请选择" @change="setLang">
+      <el-select class="lang-select" size="mini" v-model="lang" placeholder="切换语言" @change="setLang">
         <el-option v-for="item in langs" :key="item.value" :label="item.label" :value="item.value"> </el-option>
       </el-select>
     </div>
@@ -155,6 +155,6 @@ export default {
 .lang-select {
   margin-right: 10px;
   margin-left: 10px;
-  width: 80px;
+  width: 100px;
 }
 </style>

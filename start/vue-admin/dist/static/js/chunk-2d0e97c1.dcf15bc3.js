@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([["chunk-2d0e97c1"],{"8e75":function(t,e,n){"use strict";n.r(e);var c={data:function(){return{}},created:function(){},methods:{}};n=n("2877"),c=Object(n.a)(c,(function(){var t=this,e=t.$createElement;return(t._self._c||e)("div",{staticClass:"center"},[t._v(" tommy ")])}),[],!1,null,"58b7dd28",null);e.default=c.exports}}]);

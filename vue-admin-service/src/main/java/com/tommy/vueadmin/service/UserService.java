@@ -259,7 +259,7 @@ public class UserService {
         }
         UserEntity byUser = userDao.findByUser(email);
         if (byUser != null) {
-            return ReturnDateUtil.returnData(ReturnDateUtil.CODE_ERROR, "用户已存在!", null);
+            return ReturnDateUtil.returnData(ReturnDateUtil.CODE_ERROR, "用户已删除!", null);
         }
         Object o = redisTemplate.opsForValue().get("tommy-email-" + email);
         if (o != null) {

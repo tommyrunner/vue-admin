@@ -34,7 +34,7 @@
   </div>
 </template>
 <script>
-import tableApi from './table'
+import tableApi from '@/api/table'
 import EditTable from './component/edit-table.vue'
 import SearchTable from './component/search-table.vue'
 import { $Loading, dowBlobFile } from '@/utils'

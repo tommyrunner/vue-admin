@@ -25,6 +25,7 @@
       + 通过token管理接口访问权限
     + 通过存入路由权限菜单管理用户访问路由菜单
     + 使用aop验证权限的接口，并使用filter监听是需要token的接口
+  
 + 注意事项
   + 使用rides管理缓存
     + 给token，验证码等等做缓存得加上过期时间，时间可用时间戳保存
@@ -37,6 +38,23 @@
   + 使用aop验证权限的接口，并使用filter监听是需要token的接口
     + 这里自定义了一个检测少部分接口必须需要《超级用户》才能调用
     + filter主要监听接口必须携带token并且是正确的token
+  
++ 上线注意
+
+  + 如果你是使用linux系统部署,发送邮箱可能解析不了ip,需要加上配置
+
+    ```properties
+    #linux系统兼容 无法解析域名的问题
+    spring.mail.properties.mail.smtp.auth=true
+    spring.mail.properties.mail.smtp.starttls.enable=true
+    spring.mail.properties.mail.smtp.starttls.required=true
+    spring.mail.port=465
+    spring.mail.properties.mail.smtp.socketFactory.port = 465
+    spring.mail.properties.mail.smtp.socketFactory.class = javax.net.ssl.SSLSocketFactory
+    spring.mail.properties.mail.smtp.socketFactory.fallback = false
+    ```
+
+    
 
 ## 3、vue+element前端
 
@@ -76,6 +94,7 @@
         + 搜索
         + 删除
         + 添加/修改
+  + 打包混淆，加密:UglifyJS Webpack Plugin
 
 + 注意事项
 
@@ -95,6 +114,15 @@
         + 静态路由（默认显示的路由，无需权限）
       + 匹配获取后的路由可用过vuex管理，**如果获取到了就无需addRouter添加，否则会重复添加**
       + 使用addRouter添加后得next({ ...to, replace: true })替换
+    
+  + svg管理项目图标-阿里fonticon
+  
+    + 如果需要线上使用fonticon只需要再publish里引入就行
+    + 如果需要本底直接使用(比如路由),需要将svg下载在icon本地文件夹里
+  
++ 上线注意事项
+
+  + 注意打包后的porxy时效,需要受动在拦截器中修改请求头
 
 ## 4、node生成axios请求sdk
 

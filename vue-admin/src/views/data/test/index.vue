@@ -31,7 +31,7 @@
   </div>
 </template>
 <script>
-import testApi from './test'
+import testApi from '@/api/test'
 import EditTest from './component/edit-test.vue'
 import SearchTest from './component/search-test.vue'
 import { $Loading } from '@/utils'

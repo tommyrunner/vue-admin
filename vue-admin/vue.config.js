@@ -1,20 +1,21 @@
 'use strict'
 const path = require('path')
 const defaultSettings = require('./src/settings.js')
-
+// 打包混淆
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 function resolve(dir) {
   return path.join(__dirname, dir)
 }
 
-const name = defaultSettings.title || 'vue Admin Template' // page title
+const name = defaultSettings.title || 'vue-Admin' // page title
 
 // If your port is set to 80,
 // use administrator privileges to execute the command line.
 // For example, Mac: sudo npm run
 // You can change the port by the following methods:
-// port = 9528 npm run dev OR npm run dev --port = 9528
-const port = process.env.port || process.env.npm_config_port || 9528 // dev port
-
+// port = 8600 npm run dev OR npm run dev --port = 8600
+const port = process.env.port || process.env.npm_config_port || 8600 // dev port
+// const proxyIp = process.env.NODE_ENV !== 'development' ? 'www.tmm-tommy.cn' : 'localhost' // 跨域映射
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
 module.exports = {
   /**
@@ -39,26 +40,43 @@ module.exports = {
     https: false, // 以上的ip和端口是我们本机的;下面为需要跨域的
     proxy: {
       // 配置跨域
-      '/api': {
-        target: 'http://localhost:8888/admin/', // 这里后台的地址模拟的;应该填写你们真实的后台接口
+      [process.env.VUE_APP_BASE_API]: {
+        target: `http://localhost:8601/admin/`, // 这里后台的地址模拟的;应该填写你们真实的后台接口
         ws: true,
         changOrigin: true, // 允许跨域
         pathRewrite: {
-          '^/api': '' // 请求的时候使用这个api就可以
+          [process.env.VUE_APP_BASE_API]: '' // 请求的时候使用这个api就可以
         }
       }
     }
   },
-  configureWebpack: {
-    // provide the app's title in webpack's name field, so that
-    // it can be accessed in index.html to inject the correct title.
-    name: name,
-    resolve: {
-      alias: {
-        '@': resolve('src')
-      }
+  configureWebpack: (config) => {
+    // 给app添加标题
+    config['name'] = name
+    // 设置路径
+    config.resolve.alias = {
+      '@': resolve('src')
+    }
+    // 添加混淆
+    if (process.env.NODE_ENV === 'production') {
+      config.plugins.push(new UglifyJsPlugin())
     }
   },
+  // configureWebpack: {
+  //   // provide the app's title in webpack's name field, so that
+  //   // it can be accessed in index.html to inject the correct title.
+  //   name: name,
+  //   resolve: {
+  //     alias: {
+  //       '@': resolve('src')
+  //     }
+  //   },
+  //   config: (config) => {
+  //     if (process.env.NODE_ENV === 'production') {
+  //       config.plugins.push(new UglifyJsPlugin())
+  //     }
+  //   }
+  // },
   chainWebpack(config) {
     // it can improve the speed of the first screen, it is recommended to turn on preload
     config.plugin('preload').tap(() => [

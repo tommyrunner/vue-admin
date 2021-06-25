@@ -83,8 +83,8 @@ export default {
     }
     return {
       loginForm: {
-        user: 'admin@qq.com',
-        pwd: '123123',
+        user: '',
+        pwd: '',
         code: ''
       },
       loginRules: {

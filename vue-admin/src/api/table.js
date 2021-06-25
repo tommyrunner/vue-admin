@@ -1,12 +1,20 @@
-import { getAxiosInstance, setDomain, getTableGetTableAll, postTableDeleteTable, postTableSaveTable } from 'tommy-vueadmin-sdk'
+import {
+  getAxiosInstance,
+  setDomain,
+  postTableDeleteTable,
+  postTableGetTableAll,
+  postTableSaveTable,
+  postTableExportData,
+  postTableImportData
+} from 'tommy-vueadmin-sdk'
 //修改请求头
-import { setApi } from './index'
+import { setApi } from '@/api/index'
 //getAxiosInstance:获取path,setDomain:设置请求头的方法
 setApi(getAxiosInstance, setDomain, '')
 
 // 表格-获取全部
-const GetTableGetTableAll = (params) => {
-  return getTableGetTableAll(params)
+const PostTableGetTableAll = (params) => {
+  return postTableGetTableAll(params)
 }
 // 表格-删除
 const PostTableDeleteTable = (params) => {
@@ -16,8 +24,18 @@ const PostTableDeleteTable = (params) => {
 const PostTableSaveTable = (params) => {
   return postTableSaveTable(params)
 }
+// 表格-导出
+const PostTableExportData = (params) => {
+  return postTableExportData(params)
+}
+// 表格-导入
+const PostTableImportData = (params) => {
+  return postTableImportData(params)
+}
 export default {
-  GetTableGetTableAll,
+  PostTableGetTableAll,
   PostTableDeleteTable,
-  PostTableSaveTable
+  PostTableSaveTable,
+  PostTableExportData,
+  PostTableImportData
 }

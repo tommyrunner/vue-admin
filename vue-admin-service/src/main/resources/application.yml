@@ -2,9 +2,9 @@
 spring:
   datasource:
     username: root
-    password: 122375
+    password: 123456
     url: jdbc:mysql://localhost:3306/vue-admin?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     #设置数据源
     type: com.alibaba.druid.pool.DruidDataSource
 

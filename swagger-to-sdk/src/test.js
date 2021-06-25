@@ -11,6 +11,10 @@ app.get('/toSdk', (req, res) => {
   const { swaggerPath } = req.query
   if (!swaggerPath) res.send({ code: 400, msg: '生成失败-缺少参数' })
   //访问接口,并返回sdk
+  console.log(
+    req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress + '正在配置....'
+  )
+  console.log('path:' + swaggerPath)
   axios
     .get(swaggerPath)
     .then((data) => {
@@ -26,12 +30,13 @@ app.get('/toSdk', (req, res) => {
       fs.readFile(path.join(__dirname, `./example/${api}.js`), function (error, file) {
         res.send(file)
       })
+      console.log('生成成功!....')
     })
     .catch((e) => {
       res.send({ code: 400, msg: '生成失败-' + String(e) })
     })
 })
 //启动服务
-app.listen(8600, () => {
-  console.log('swagger-to-sdk:8600')
+app.listen(8602, () => {
+  console.log('swagger-to-sdk:8602')
 })

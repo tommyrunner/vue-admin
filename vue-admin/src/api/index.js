@@ -1,7 +1,8 @@
 import { getToken } from '@/utils/auth'
 import { Message } from 'element-ui'
+import { pro_path, doc_path } from '@/utils/request'
 export function setApi(http, setBaseUrl, path) {
-  setBaseUrl('/api' + path)
+  setBaseUrl(pro_path + path)
   // 拦截器，为后端每一个请求加上authorization
   http().interceptors.request.use(
     (config) => {
