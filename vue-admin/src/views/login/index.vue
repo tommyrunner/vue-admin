@@ -59,11 +59,6 @@
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">{{
         $t('loginPage.login')
       }}</el-button>
-
-      <div class="tips">
-        <span style="margin-right:20px;">username: admin</span>
-        <span> password: any</span>
-      </div>
     </el-form>
   </div>
 </template>
@@ -74,13 +69,6 @@ import { generateUUID } from '@/utils'
 export default {
   name: 'Login',
   data() {
-    const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
-      } else {
-        callback()
-      }
-    }
     return {
       loginForm: {
         user: '',
@@ -89,7 +77,7 @@ export default {
       },
       loginRules: {
         user: [{ required: true, trigger: 'blur' }],
-        pwd: [{ required: true, trigger: 'blur', validator: validatePassword }],
+        pwd: [{ required: true, trigger: 'blur', min: 1, max: 6 }],
         code: [{ required: true, trigger: 'blur', min: 1, max: 2 }]
       },
       codeImg: '',
@@ -238,14 +226,28 @@ $light_gray: #eee;
   width: 100%;
   background-color: $bg;
   overflow: hidden;
-
+  position: relative;
   .login-form {
-    position: relative;
+    position: absolute;
     width: 520px;
     max-width: 100%;
     padding: 160px 35px 0;
     margin: 0 auto;
     overflow: hidden;
+    left: 50%;
+    top: 10%;
+    transform: translateX(-50%);
+    animation: loginForm 1s;
+  }
+  @keyframes loginForm {
+    0% {
+      top: 0%;
+      opacity: 0.3;
+    }
+    100% {
+      top: 10%;
+      opacity: 1;
+    }
   }
 
   .tips {

@@ -4,7 +4,7 @@ public interface {{Module}}Dao extends JpaRepository<{{Module}}Entity,Integer> {
     //根据id批量删除
     void delete{{Module}}EntitiesByIdIn(List<Integer> {{module}}Ids);
     //批量查询+分页+模糊
-    List<{{Module}}Entity> findAllBy{{#each entity}}{{this.Key}}ContainingAnd{{/each}}  ({{#each entity}}{{this.type}} {{this.key}},{{/each}}Pageable p);
+    List<{{Module}}Entity> findAllBy{{#each entity}}{{this.Key}}Containing{{#if this.isLast}}{{else}}And{{/if}}{{/each}}  ({{#each entity}}{{this.type}} {{this.key}},{{/each}}Pageable p);
     //根据条件查询总数
-    Integer countAllBy{{#each entity}}{{this.Key}}ContainingAnd{{/each}}  ({{#each entity}}{{this.type}} {{this.key}},{{/each}});
+    Integer countAllBy{{#each entity}}{{this.Key}}Containing{{#if this.isLast}}{{else}}And{{/if}}{{/each}}  ({{#each entity}}{{this.type}} {{this.key}}{{#if this.isLast}}{{else}},{{/if}}{{/each}});
 }

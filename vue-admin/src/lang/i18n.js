@@ -16,6 +16,6 @@ function getLanguage() {
 }
 export default new VueI18n({
   locale: getLanguage(), // set locale 默认显示中文
-  fallbackLocale: 'en', //如果语言包没有，则默认从英语中抽取
+  fallbackLocale: 'zh', //如果语言包没有
   messages: messages // set locale messages
 })

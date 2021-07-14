@@ -144,3 +144,255 @@
   + 通过npm下载,并使用
 
     + 在vue中按模块依次Import自己需要的axios方法
+
+## 5、使用方法
+
+### 5.1启动vue-admin客户端
+
++ 下载依赖
+  + npm run install
++ 启动服务
+  + npm run dev
+
+### 5.2、文件目录结构
+
++ 大致与vue-element-admin（因为是在它基础上写的）
+
+  + [vue-element-admin官网][https://panjiachen.github.io/vue-element-admin-site/zh/guide/#%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84]
+
+  ```sh
+  ├── build                      # 构建相关
+  ├── plop-templates             # 基本模板
+  ├── public                     # 静态资源
+  │   │── favicon.ico            # favicon图标
+  │   └── index.html             # html模板
+  ├── src                        # 源代码
+  │   ├── api                    # 所有请求
+  │   ├── assets                 # 主题 字体等静态资源
+  │   ├── components             # 全局公用组件
+  │   ├── directive              # 全局指令
+  │   ├── filters                # 全局 filter
+  │   ├── icons                  # 项目所有 svg icons
+  │   ├── lang                   # 国际化 language
+  │   ├── layout                 # 全局 layout
+  │   ├── router                 # 路由
+  │   ├── store                  # 全局 store管理
+  │   ├── styles                 # 全局样式
+  │   ├── utils                  # 全局公用方法
+  │   ├── views                  # views 所有页面
+  │   ├── App.vue                # 入口页面
+  │   ├── main.js                # 入口文件 加载组件 初始化等
+  │   └── permission.js          # 权限管理
+  ├── .env.xxx                   # 环境变量配置
+  ├── .eslintrc.js               # eslint 配置项
+  ├── .babelrc                   # babel-loader 配置
+  ├── .travis.yml                # 自动化CI配置
+  ├── vue.config.js              # vue-cli 配置
+  ├── postcss.config.js          # postcss 配置
+  └── package.json               # package.json
+  ```
+
+### 5.3、plop快速生成
+
++ 首先查看模板是否是自己所需要的内容
+
++ 模板介绍
+
++ plop-templates模板介绍
+
+  + form表单模块
+
+    + api：生成调用api的**方法**（这里的方法是以及通过sdk离的axios封装后的）
+
+    + config：核心json文件，通过这个生成内容离需要的值
+
+      ```json
+      {
+          "form": [
+              { "label": "值", "key": "value" },
+              { "label": "备注", "key": "note" }
+          ],
+          "edit": [
+              { "label": "值", "key": "value" },
+              { "label": "备注", "key": "note" }
+          ],
+          "formName": "测试",
+          "Api": "Test",
+          "api": "test"
+      }
+      ```
+
+      
+
+    + edit：生成表单的编辑组件模块
+
+    + search：生成表单的搜索组件模块
+
+    + prompt：plop的核心文件，通过这个文件，传输数据给模板
+
+      ```js
+      const { notEmpty } = require('../utils') // 自己定义的一个工具方法-后面会说
+      // 导入数据
+      const formJson = require('./config.json')
+      
+      module.exports = {
+        description: '自动按模板生成 表单', // 描述这个generate的作用
+        prompts: [
+          {
+            type: 'input', // 问题的类型
+            name: 'fileName', // 问题对应得到答案的变量名，可以在acitons中使用该变量
+            message: '请输入模块名:', // 在命令行中的问题
+            validate: notEmpty('fileName') // 验证输入的值，notEmpty自定义的工具方法里验证
+          }
+          // 这里可以多个，代表多个问题，依次执行
+          /**    {
+            type: 'input', // 问题的类型
+            name: 'pathName2', // 问题对应得到答案的变量名，可以在acitons中使用该变量
+            message: '文件名称2' // 在命令行中的问题
+          }**/
+        ],
+        // 执行的动作
+        actions: (data) => {
+          // 这里可以通过data获取输入的fileName
+          const actions = [
+            // 创建index.js文件
+            {
+              type: 'add', // 操作类型 添加文件
+              path: `src/${data.fileName}/index.vue`, // 添加的文件的路径
+              templateFile: 'plop-templates/form/index.hbs', // 模版文件的路径（***这里就是想要生成的模板）
+              data: {
+                form: formJson.form,
+                formName: formJson.formName,
+                api: formJson.api,
+                Api: formJson.Api
+              }
+            },
+            // 创建edit文件
+            {
+              type: 'add', // 操作类型 添加文件
+              path: `src/${data.fileName}/component/edit-${data.fileName}.vue`, // 添加的文件的路径
+              templateFile: 'plop-templates/form/edit.hbs', // 模版文件的路径（***这里就是想要生成的模板）
+              data: {
+                edit: formJson.edit,
+                formName: formJson.formName,
+                api: formJson.api,
+                Api: formJson.Api
+              }
+            },
+            // 创建search文件
+            {
+              type: 'add', // 操作类型 添加文件
+              path: `src/${data.fileName}/component/search-${data.fileName}.vue`, // 添加的文件的路径
+              templateFile: 'plop-templates/form/search.hbs', // 模版文件的路径（***这里就是想要生成的模板）
+              data: {
+                form: formJson.form,
+                formName: formJson.formName,
+                api: formJson.api,
+                Api: formJson.Api
+              }
+            },
+            // 创建api文件
+            {
+              type: 'add', // 操作类型 添加文件
+              path: `src/${data.fileName}/${data.fileName}.js`, // 添加的文件的路径
+              templateFile: 'plop-templates/form/api.hbs', // 模版文件的路径（***这里就是想要生成的模板）
+              data: {
+                api: formJson.api,
+                formName: formJson.formName,
+                Api: formJson.Api
+              }
+            }
+          ]
+          return actions
+        }
+      }
+      
+      ```
+
+  + formLang：和form模块类似，带有一点点lang的国际化
+
+  + spring：后端代码模块
+
+    + config
+
+      ```json
+      {
+          "entity": [
+              { "label": "值", "key": "value", "Key": "Value", "type": "String", "nullable": "false" },
+              { "isLast": true, "label": "备注", "key": "note", "Key": "Note", "type": "String", "nullable": "false" }
+          ],
+          "Module": "Test",
+          "module": "test"
+      }
+      
+      ```
+
+      > 注意：
+      >
+      > + 这里的isLast是必须有的，判断是否是最后一个属性值
+
+    + entity：后端实体类
+
+    + dao：后端的数据库操作，这里使用了JPA实现
+
+    + service：后端接口服务
+
+    + controller：后端接口
+
+    + prompt：核心数据传输与动作
+
++ 使用plop模板还需要在跟目录创建一个，主文件plopfile.js
+
+  ```js
+  const formGenerator = require('./plop-templates/form/prompt') // 生成表单模块
+  const formLangGenerator = require('./plop-templates/formLang/prompt') // 生成表单模块-国际化
+  const springGenerator = require('./plop-templates/spring/prompt') // 后端4大模块
+  
+  module.exports = function(plop) {
+      plop.setGenerator('form', formGenerator)
+      plop.setGenerator('formLang', formLangGenerator)
+      plop.setGenerator('spring', springGenerator)
+      // 如果模块多个，启动时，控制台可以选择
+  }
+  ```
+
++ 最后启动plop生成器
+
+  1. package.json配置启动
+
+     ```json
+     "scripts": {
+         "plop": "plop"
+       },
+     ```
+
+  2. 启动:npm run plop
+
+  3. 此时需要选择模块-选择form
+
+  4. 给生成模块文件取名
+
++ 最后附上，hbs文件的基本操作
+
+  + 简单获取值
+
+    ```handlebars
+    {{obj}} or {{obj.key}}
+    ```
+
+  + 循环遍历
+
+    ```handlebars
+    {{#each list}}{{this.key}}{{/each}}
+    ```
+
+    > 循环list，list的每个对象值默认是this
+
+  + 添加判断显示
+
+    ```handlebars
+    {{#if this.isLast}}是{{else}}否{{/if}}
+    ```
+
+    > 注意的是else后面才是否定的值
+

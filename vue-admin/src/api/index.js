@@ -1,8 +1,9 @@
 import { getToken } from '@/utils/auth'
 import { Message } from 'element-ui'
-import { pro_path, doc_path } from '@/utils/request'
+import { pro_path, deve_path } from '@/utils/request'
 export function setApi(http, setBaseUrl, path) {
-  setBaseUrl(pro_path + path)
+  // 根据开发模式配置请求头
+  setBaseUrl((process.env.NODE_ENV === 'developent' ? deve_path : pro_path) + path)
   // 拦截器，为后端每一个请求加上authorization
   http().interceptors.request.use(
     (config) => {
