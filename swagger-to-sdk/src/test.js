@@ -9,7 +9,7 @@ const axios = require('axios')
 //通过接口接收swagger json数据
 app.get('/toSdk', (req, res) => {
   const { swaggerPath } = req.query
-  if (!swaggerPath) res.send({ code: 400, msg: '生成失败-缺少参数' })
+  if (!swaggerPath) res.send({ code: 400, msg: 'Build failed - missing parameters' })
   //访问接口,并返回sdk
   console.log(
     req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress + '正在配置....'
@@ -30,10 +30,10 @@ app.get('/toSdk', (req, res) => {
       fs.readFile(path.join(__dirname, `./example/${api}.js`), function (error, file) {
         res.send(file)
       })
-      console.log('生成成功!....')
+      console.log('Generated successfully!....')
     })
     .catch((e) => {
-      res.send({ code: 400, msg: '生成失败-' + String(e) })
+      res.send({ code: 400, msg: 'Build failed-' + String(e) })
     })
 })
 //启动服务

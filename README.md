@@ -154,7 +154,7 @@
 + 启动服务
   + npm run dev
 
-### 5.2、文件目录结构
+#### 5.1.1、文件目录结构
 
 + 大致与vue-element-admin（因为是在它基础上写的）
 
@@ -192,7 +192,7 @@
   └── package.json               # package.json
   ```
 
-### 5.3、plop快速生成
+#### 5.1.2、plop快速生成
 
 + 首先查看模板是否是自己所需要的内容
 
@@ -331,15 +331,19 @@
       >
       > + 这里的isLast是必须有的，判断是否是最后一个属性值
 
-    + entity：后端实体类
+    + entity：模板-后端实体类
 
-    + dao：后端的数据库操作，这里使用了JPA实现
+    + dao：模板-后端的数据库操作，这里使用了JPA实现
 
-    + service：后端接口服务
+    + service：模板-后端接口服务
 
-    + controller：后端接口
+    + controller：模板-后端接口
 
     + prompt：核心数据传输与动作
+    
+    > 注意:
+    >
+    > + 这里生成所有代码都是在vue-admin项目中的src里,生成后端代码后,需自行复制倒vue-admin-service项目中
 
 + 使用plop模板还需要在跟目录创建一个，主文件plopfile.js
 
@@ -396,3 +400,187 @@
 
     > 注意的是else后面才是否定的值
 
+### 5.2、启动vue-admin-service后端
+
+#### 5.2.1、文件目录结构
+
+```sh
+├── target                      # 打包文件
+├── public                     # 静态资源
+│   │── favicon.ico            # favicon图标
+│   └── index.html             # html模板
+├── src                        # 源代码
+│   ├── main>java>包名         # 所有请求
+│   │    ├── aop			 # aop切入
+│   │    ├── config			 # spring配置文件
+│   │    ├── entity			 # 实体类文件
+│   │    ├── dao			 # 数据库操作层（这里使用JPA）
+│   │    ├── service		 # 服务层
+│   │    ├── controller		 # 接口层
+│   │    ├── utils		 	 # 工具包
+│   │    ├── xxxApplication.java	 # 启动文件
+├── pom.xml                     # 依赖文件
+├──...
+```
+
+> 注意：代码只是模板，可以根据自己项目修改
+
+### 5.3、启动swagger-to-sdk，axios生成器
+
+#### 5.3.1、文件目录结构
+
+```sh
+├── src                        # 源代码
+│   ├── example                # 测试swagger.json的静态文件
+│   ├── template               # 模板文件
+│   ├── codegen.js             # 模板替换
+│   ├── test.js             # 入口启动文件
+│   ├── index              	# 功能与test.js一致
+│   ├── parse                # 解析器
+├── postcss.config.js          # postcss 配置
+└── package.json               # package.json
+```
+
+> 注意：
+>
+> + node项目，启动index和test一个效果
+> + 该模板以及解析器都是根据自己项目写的
+> + 启动好项目后**xxxx:8602/toSdk?swaggerPath=http://localhost:xx/项目/v2/api-docs**
+>   + 这里注意传入的**是本地服务能够访问到的swagger的json地址/v2/adpi.docs是swagger默认的**
+
+#### 5.3.2、生成后的sdk使用
+
++ 文件简述
+
+  ```js
+  /* eslint-disable */
+  import axios from 'axios'
+  import qs from 'qs'
+  let domain = '' // 请求头
+  let axiosInstance = axios.create() //创建的axios
+  // 获取请求头
+  export const getDomain = () => {
+    return domain
+  }
+  // 设置请求头
+  export const setDomain = ($domain) => {
+    domain = $domain
+  }
+  // 获取axios监听器
+  export const getAxiosInstance = () => {
+    return axiosInstance
+  }
+  // 设置axos监听器
+  export const setAxiosInstance = ($axiosInstance) => {
+    axiosInstance = $axiosInstance
+  }
+  // 请求
+  export const request = (method, url, body, queryParameters, formData, config) => {
+    method = method.toLowerCase()
+    if (!config) {
+      config = {};
+    }
+    config.url = url;
+    config.params = queryParameters;
+    config.method = method;
+    const formDataExist = formData.entries().next().value;
+    const bodyExist = body && Object.keys(body).length > 0;
+    if (formDataExist) {
+      config.data = formData;
+    } else if (bodyExist) {
+      config.data = body;
+    }
+    return axiosInstance.request(config);
+  }
+  /*==========================================================
+   *                    文档描述
+   ==========================================================*/
+  const isArray = (val) => !!val && Array.isArray(val)
+  /**
+   * deleteRoles
+   * request: postRolesDeleteRoles
+   * url: postRolesDeleteRolesURL
+   */
+  //-----下面就是根据swagger的json生成的接口访问
+  export const postRolesDeleteRoles = function(parameters = {}) {
+    const domain = parameters.$domain ? parameters.$domain : getDomain()
+    const config = parameters.$config
+    let path = '/roles/deleteRoles'
+    let body = {};
+    let queryParameters = {};
+    let formData = new FormData();
+   	// 接口访问逻辑
+  }
+  ```
+
+  > 注意：
+  >
+  > + 这个只是模板-可以根据自己项目后端的接口访问习惯定
+
++ 为了让前端更方便使用，将此文件，上传到npm
+
++ 前端使用
+
+  + index.js
+
+    ```js
+    
+    export function setApi(http, setBaseUrl, path) {
+        setBaseUrl('/api' + path)
+        http().interceptors.request.use(
+            config => {
+                // 拦截器，为后端每一个请求加上authorization
+                return config
+            },
+            error => {
+                return Promise.reject(error)
+            }
+        )
+        // 拦截器 401
+        http().interceptors.response.use(
+            response => {
+                return response
+            },
+            async (res) => {
+                return Promise.reject(response) // 返回接口返回的错误信息
+            }
+        )
+    }
+    
+    ```
+
+  + 模板使用
+
+    ```js
+    import { getAxiosInstance, setDomain, xxxSaveUser } from 'xxxx'
+    import { setApi } from './index'
+    // 模块导入时就设置好监听器以及请求头
+    setApi(getAxiosInstance, setDomain, '')
+    
+    // 保存用户
+    const XxxSaveUser = params => {
+        return xxxSaveUser(params)
+    }
+    
+    export default {
+        XxxSaveUser
+    }
+    
+    ```
+
+  + 界面调用
+
+    ```js
+    import { XxxSaveUser } from '@/api/user'
+    XxxSaveUser({prarms})
+        .then(res=>{
+    
+    })
+        .catch(e=>{
+    
+    })
+    ```
+
+    
+
+  
