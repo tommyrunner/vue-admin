@@ -453,70 +453,13 @@
 + 文件简述
 
   ```js
-  /* eslint-disable */
-  import axios from 'axios'
-  import qs from 'qs'
-  let domain = '' // 请求头
-  let axiosInstance = axios.create() //创建的axios
-  // 获取请求头
-  export const getDomain = () => {
-    return domain
-  }
-  // 设置请求头
-  export const setDomain = ($domain) => {
-    domain = $domain
-  }
-  // 获取axios监听器
-  export const getAxiosInstance = () => {
-    return axiosInstance
-  }
-  // 设置axos监听器
-  export const setAxiosInstance = ($axiosInstance) => {
-    axiosInstance = $axiosInstance
-  }
-  // 请求
-  export const request = (method, url, body, queryParameters, formData, config) => {
-    method = method.toLowerCase()
-    if (!config) {
-      config = {};
-    }
-    config.url = url;
-    config.params = queryParameters;
-    config.method = method;
-    const formDataExist = formData.entries().next().value;
-    const bodyExist = body && Object.keys(body).length > 0;
-    if (formDataExist) {
-      config.data = formData;
-    } else if (bodyExist) {
-      config.data = body;
-    }
-    return axiosInstance.request(config);
-  }
-  /*==========================================================
-   *                    文档描述
-   ==========================================================*/
-  const isArray = (val) => !!val && Array.isArray(val)
-  /**
-   * deleteRoles
-   * request: postRolesDeleteRoles
-   * url: postRolesDeleteRolesURL
-   */
-  //-----下面就是根据swagger的json生成的接口访问
-  export const postRolesDeleteRoles = function(parameters = {}) {
-    const domain = parameters.$domain ? parameters.$domain : getDomain()
-    const config = parameters.$config
-    let path = '/roles/deleteRoles'
-    let body = {};
-    let queryParameters = {};
-    let formData = new FormData();
-   	// 接口访问逻辑
-  }
+  //-- 使用axios访问接口模板代码,自己定义
   ```
-
+  
   > 注意：
   >
   > + 这个只是模板-可以根据自己项目后端的接口访问习惯定
-
+  
 + 为了让前端更方便使用，将此文件，上传到npm
 
 + 前端使用
